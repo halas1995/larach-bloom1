@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LARACH BLOOM \u2014 Administration</title>
+<link rel="icon" href="assets/images/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/app-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="loginOverlay" class="login-overlay">
+  <div class="login-card">
+    <h2 data-i18n="adminLogin">Administration</h2>
+    <p class="login-sub" data-i18n="adminLoginSub">LARACH BLOOM</p>
+    <div class="field">
+      <label data-i18n="adminUser">Identifiant</label>
+      <input type="text" id="loginUser" placeholder="admin" autocomplete="off">
+    </div>
+    <div class="field">
+      <label data-i18n="adminPass">Mot de passe</label>
+      <input type="password" id="loginPass" placeholder="••••••••">
+    </div>
+    <p id="loginError" class="login-error"></p>
+    <button class="btn-primary" id="loginBtn" onclick="handleLogin()" data-i18n="adminLoginBtn">Se connecter</button>
+  </div>
+</div>
+
+<div class="top-bar" data-i18n="adminLogin">Administration Larach Bloom</div>
+
+<div class="admin-wrap">
+  <aside class="admin-side">
+    <h2 data-i18n="adminLogin">Admin</h2>
+    <button class="btn-small danger" onclick="if(confirm(t('adminConfirmReset'))){localStorage.clear();alert(t('adminDataCleared'));location.reload();}" style="margin-bottom:12px;width:100%;" data-i18n="adminReset">R\u00e9initialiser les donn\u00e9es</button>
+    <nav>
+      <a href="#" class="active" data-tab="dashboard" data-i18n="adminDashboard">Tableau de bord</a>
+      <a href="#" data-tab="orders" data-i18n="adminOrders">Commandes</a>
+      <a href="#" data-tab="products" data-i18n="adminProducts">Produits</a>
+      <a href="#" data-tab="add-product" data-i18n="adminAddProduct">Ajouter / Modifier</a>
+    </nav>
+    <button class="btn-small" onclick="logout()" style="width:100%;margin-top:12px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);" data-i18n="adminLogout">D\u00e9connexion</button>
+    <a href="index.html" class="back-link" data-i18n="adminBack">&larr; Retour au site</a>
+  </aside>
+  <main class="admin-main" id="adminMain" style="display:none;">
+    <div id="tab-dashboard" class="admin-tab">
+      <h1 data-i18n="adminDashboard">Tableau de bord</h1>
+      <div class="admin-cards">
+        <div class="admin-card">
+          <h3 data-i18n="adminTotalOrders">Total commandes</h3>
+          <div class="num" id="totalOrders">0</div>
+        </div>
+        <div class="admin-card">
+          <h3 data-i18n="adminPending">En attente</h3>
+          <div class="num" id="pendingOrders">0</div>
+        </div>
+        <div class="admin-card">
+          <h3 data-i18n="adminTotalProducts">Produits</h3>
+          <div class="num" id="totalProducts">0</div>
+        </div>
+      </div>
+      <div class="admin-section">
+        <h2 data-i18n="adminRecentOrders">Derni\u00e8res commandes</h2>
+        <table class="admin-table" id="recentOrdersTable">
+          <thead>
+            <tr><th data-i18n="adminOrderRef">Commande</th><th data-i18n="adminClient">Client</th><th data-i18n="adminTotal">Total</th><th data-i18n="adminDate">Date</th><th data-i18n="adminStatus">Statut</th></tr>
+          </thead>
+          <tbody id="recentOrdersBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-orders" class="admin-tab" style="display:none;">
+      <h1 data-i18n="adminOrders">Commandes</h1>
+      <div class="admin-section">
+        <table class="admin-table" id="ordersTable">
+          <thead>
+            <tr><th data-i18n="adminOrderRef">Commande</th><th data-i18n="adminClient">Client</th><th data-i18n="adminPhone">T\u00e9l\u00e9phone</th><th data-i18n="adminAddress">Adresse</th><th data-i18n="adminItems">Articles</th><th data-i18n="adminTotal">Total</th><th data-i18n="adminDate">Date</th><th data-i18n="adminStatus">Statut</th><th data-i18n="adminAction">Action</th></tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-products" class="admin-tab" style="display:none;">
+      <h1 data-i18n="adminProducts">Produits</h1>
+      <div class="admin-section">
+        <table class="admin-table" id="productsTable">
+          <thead>
+            <tr><th data-i18n="adminImage">Image</th><th data-i18n="adminName">Nom</th><th data-i18n="adminPrice">Prix</th><th data-i18n="adminQty">Qté</th><th data-i18n="adminActions">Actions</th></tr>
+          </thead>
+          <tbody id="productsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-add-product" class="admin-tab" style="display:none;">
+      <h1 id="formTitle" data-i18n="adminAddProduct">Ajouter un produit</h1>
+      <div class="admin-section">
+        <form id="productForm" onsubmit="event.preventDefault();addProduct()">
+          <input type="hidden" id="editId" value="">
+          <div class="field">
+            <label data-i18n="adminProdName">Nom du produit</label>
+            <input type="text" id="prodName" required data-i18n-placeholder="adminProdName" placeholder="Ex: Huile d'argan pure">
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label data-i18n="adminProdPrice">Prix (DH)</label>
+              <input type="number" id="prodPrice" required placeholder="150" min="1">
+            </div>
+            <div class="field">
+              <label data-i18n="adminProdQty">Quantité</label>
+              <input type="number" id="prodQty" required placeholder="10" min="0">
+            </div>
+            <div class="field">
+              <label data-i18n="adminProdImage">Image du produit</label>
+              <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                <input type="file" id="prodImageInput" accept="image/*">
+                <button type="button" class="btn-small outline" onclick="document.getElementById('prodImageInput').value='';document.getElementById('imagePreview').style.display='none';" data-i18n="adminDelete">Supprimer</button>
+              </div>
+              <div id="imagePreview" style="margin-top:8px;display:none;">
+                <img id="previewImg" style="width:120px;height:120px;object-fit:cover;border:1px solid #eee;border-radius:4px;">
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="adminProdDesc">Description (optionnelle)</label>
+            <textarea id="prodDesc" rows="3" data-i18n-placeholder="adminProdDesc" placeholder="Description du produit..."></textarea>
+          </div>
+          <div class="field">
+            <label data-i18n="adminProdCat">Cat\u00e9gorie</label>
+            <select id="prodCategory">
+              <option value="huiles" data-i18n="adminCatHuiles">Huiles</option>
+              <option value="soins" data-i18n="adminCatSoins">Soins visage</option>
+              <option value="corps" data-i18n="adminCatCorps">Soins corps</option>
+              <option value="coffrets" data-i18n="adminCatCoffrets">Coffrets</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <button type="button" class="btn-primary" id="formSubmitBtn" onclick="addProduct()" data-i18n="adminAddBtn">Ajouter le produit</button>
+            <button type="button" class="btn-small outline" id="formCancelBtn" style="display:none;" onclick="cancelEdit()" data-i18n="adminCancelEdit">Annuler</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

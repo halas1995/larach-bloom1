@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LARACH BLOOM \u2014 Accueil</title>
+<link rel="icon" href="assets/images/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/app-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<header class="header header-transparent">
+  <div class="header-inner">
+    <a href="index.html" class="logo"><img src="assets/images/logo.png" alt="LARACH BLOOM"></a>
+    <nav class="nav" id="nav">
+      <a href="index.html" class="active" data-i18n="home">Accueil</a>
+      <a href="products.html" data-i18n="products">Produits</a>
+      <a href="contact.html" data-i18n="contact">Contact</a>
+    </nav>
+    <div class="header-right">
+      <a href="https://www.instagram.com/larach_bloom" target="_blank" class="icon-link" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" width="17" height="17"><path fill="currentColor" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <button class="cart-btn" id="cartBtn" aria-label="Panier">
+        <svg viewBox="0 0 24 24" width="19" height="19"><path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14.75l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25z"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <img class="hero-bg" src="/assets/media/background.jpg" alt="">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>LARACH BLOOM</h1>
+      <p class="hero-tagline" data-i18n="heroSub">Inpir\u00e9 par la nature, cr\u00e9\u00e9 pour votre peau</p>
+      <a href="products.html" class="hero-btn" data-i18n="heroBtn">D\u00e9couvrir</a>
+    </div>
+  </section>
+
+  <section class="essence-section">
+    <video class="essence-video" autoplay muted loop playsinline poster="assets/media/background.jpg">
+      <source src="assets/media/video-off.mp4" type="video/mp4">
+    </video>
+    <div class="essence-overlay"></div>
+    <div class="essence-content">
+      <span class="section-label light" data-i18n="essenceLabel">Notre Essence</span>
+      <p data-i18n="essenceText">Chez Larach Bloom, chaque soin est inspir\u00e9 de la nature marocaine et con\u00e7u pour r\u00e9v\u00e9ler l'\u00e9clat naturel de votre peau. Des ingr\u00e9dients purs, un savoir-faire authentique, pour une beaut\u00e9 qui vous ressemble.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <img src="assets/images/logo.png" alt="LARACH BLOOM" class="footer-logo">
+      <p data-i18n="footerTag">Inspir\u00e9 par la nature,<br>cr\u00e9\u00e9 pour votre peau</p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footerNav">Navigation</h4>
+      <a href="index.html" data-i18n="home">Accueil</a>
+      <a href="products.html" data-i18n="products">Produits</a>
+      <a href="contact.html" data-i18n="contact">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footerContact">Contact</h4>
+      <a href="https://wa.me/212755296253">+212 755-296253</a>
+      <a href="mailto:LARACHBLOOM@GMAIL.COM">LARACHBLOOM@GMAIL.COM</a>
+      <a href="https://www.instagram.com/larach_bloom">@larach_bloom</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footerFollow">Suivez-nous</h4>
+      <a href="https://www.instagram.com/larach_bloom" target="_blank">Instagram</a>
+      <a href="https://wa.me/212755296253" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p data-i18n="footerRights">&copy; 2026 LARACH BLOOM. Tous droits r\u00e9serv\u00e9s.</p>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<div class="cart" id="cart">
+  <div class="cart-header">
+    <h3 data-i18n="cartTitle">Panier</h3>
+    <button class="cart-close" id="cartClose">&times;</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" data-i18n="cartEmpty">Votre panier est vide</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span data-i18n="cartTotal">Total</span>
+      <span id="cartTotal">0 DH</span>
+    </div>
+    <button class="btn-primary" id="checkoutBtn" disabled data-i18n="cartCheckout">Commander (COD)</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
