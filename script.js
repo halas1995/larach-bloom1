@@ -265,12 +265,37 @@ function loadProducts() {
     else { products = JSON.parse(JSON.stringify(defaultProducts)); localStorage.setItem('lb_products', JSON.stringify(products)); }
   } catch(e) { products = JSON.parse(JSON.stringify(defaultProducts)); }
   products.forEach(function(p) { if (p.qty === undefined) p.qty = 0; });
+  fetchProductsFromServer();
+}
+
+function fetchProductsFromServer() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', API_BASE + '/api/products', true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try {
+        var resp = JSON.parse(xhr.responseText);
+        if (resp.source === 'server' && Array.isArray(resp.products) && resp.products.length > 0) {
+          products = resp.products;
+          products.forEach(function(p) { if (p.qty === undefined) p.qty = 0; });
+          localStorage.setItem('lb_products', JSON.stringify(products));
+          renderProducts();
+          renderProductsTable();
+        }
+      } catch(e) {}
+    }
+  };
+  xhr.send();
 }
 
 function saveProducts() {
   try { localStorage.setItem('lb_products', JSON.stringify(products)); } catch(e) {}
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', API_BASE + '/api/products', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader('Authorization', 'Basic ' + btoa(ADMIN_CREDENTIALS.username + ':' + ADMIN_CREDENTIALS.password));
+  xhr.send(JSON.stringify({ products: products }));
 }
-
 function loadCart() {
   try { var d = localStorage.getItem('lb_cart'); if (d) cart = JSON.parse(d); } catch(e) {}
 }
