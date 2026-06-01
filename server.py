@@ -9,6 +9,7 @@ PORT = int(sys.argv[1]) if len(sys.argv) > 1 else int(os.environ.get('PORT', '80
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(ROOT, 'data')
 ORDERS_FILE = os.path.join(DATA_DIR, 'orders.json')
+PRODUCTS_FILE = os.path.join(DATA_DIR, 'products.json')
 
 ADMIN_USER = 'admin'
 ADMIN_PASS = 'larachbloom'
@@ -23,6 +24,15 @@ def load_orders():
 
 def save_orders(orders):
   with open(ORDERS_FILE, 'w', encoding='utf-8') as f: json.dump(orders, f, ensure_ascii=False, indent=2)
+
+def load_products():
+  if not os.path.exists(PRODUCTS_FILE): return None
+  try:
+    with open(PRODUCTS_FILE, 'r', encoding='utf-8') as f: return json.load(f)
+  except: return None
+
+def save_products(products):
+  with open(PRODUCTS_FILE, 'w', encoding='utf-8') as f: json.dump(products, f, ensure_ascii=False, indent=2)
 
 valid_statuses = {'En attente', 'Confirm\u00e9e', 'Exp\u00e9di\u00e9e', 'Livr\u00e9e', 'Annul\u00e9e'}
 
@@ -55,6 +65,12 @@ class Handler(SimpleHTTPRequestHandler):
       limit = int(qs.get('limit', [0])[0])
       if limit > 0: orders = orders[-limit:]
       self.send_json(orders)
+    elif parsed.path == '/api/products':
+      prods = load_products()
+      if prods is None:
+        self.send_json({'source': 'default'})
+      else:
+        self.send_json({'source': 'server', 'products': prods})
     elif re.match(r'^/api/orders/\d+$', parsed.path):
       if not auth_ok(self.headers): return self.send_err(401, 'Unauthorized')
       oid = parsed.path.split('/')[-1]
@@ -77,6 +93,14 @@ class Handler(SimpleHTTPRequestHandler):
       orders.append(order)
       save_orders(orders)
       self.send_json({ 'success': True, 'id': oid })
+    elif self.path == '/api/products':
+      if not auth_ok(self.headers): return self.send_err(401, 'Unauthorized')
+      length = int(self.headers.get('Content-Length', 0))
+      body = self.rfile.read(length) if length else b'{}'
+      try: data = json.loads(body)
+      except: return self.send_err(400, 'Invalid JSON')
+      save_products(data.get('products', []))
+      self.send_json({ 'success': True })
     else:
       self.send_err(404, 'Not found')
 
