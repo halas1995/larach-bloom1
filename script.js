@@ -275,26 +275,33 @@ function fetchProductsFromServer() {
     if (xhr.status === 200) {
       try {
         var resp = JSON.parse(xhr.responseText);
-        if (resp.source === 'server' && Array.isArray(resp.products) && resp.products.length > 0) {
-          var serverProducts = resp.products.map(function(p) {
-            delete p._imageData;
-            if (p.qty === undefined) p.qty = 0;
-            return p;
-          });
-          defaultProducts.forEach(function(dp) {
-            var found = false;
-            for (var i = 0; i < serverProducts.length; i++) {
-              if (serverProducts[i].id === dp.id) { found = true; break; }
-            }
-            if (!found) {
-              var copy = JSON.parse(JSON.stringify(dp));
-              serverProducts.push(copy);
-            }
-          });
-          products = serverProducts;
-          localStorage.setItem('lb_products', JSON.stringify(products));
-          renderProducts();
-          renderProductsTable();
+        if (resp.source === 'server' && Array.isArray(resp.products)) {
+          if (resp.products.length === 0) {
+            products = [];
+            localStorage.removeItem('lb_products');
+            renderProducts();
+            renderProductsTable();
+          } else {
+            var serverProducts = resp.products.map(function(p) {
+              delete p._imageData;
+              if (p.qty === undefined) p.qty = 0;
+              return p;
+            });
+            defaultProducts.forEach(function(dp) {
+              var found = false;
+              for (var i = 0; i < serverProducts.length; i++) {
+                if (serverProducts[i].id === dp.id) { found = true; break; }
+              }
+              if (!found) {
+                var copy = JSON.parse(JSON.stringify(dp));
+                serverProducts.push(copy);
+              }
+            });
+            products = serverProducts;
+            localStorage.setItem('lb_products', JSON.stringify(products));
+            renderProducts();
+            renderProductsTable();
+          }
         }
       } catch(e) {}
     }
