@@ -276,7 +276,7 @@ function fetchProductsFromServer() {
       try {
         var resp = JSON.parse(xhr.responseText);
         if (resp.source === 'server' && Array.isArray(resp.products) && resp.products.length > 0) {
-          products = resp.products.map(function(p) {
+          var serverProducts = resp.products.map(function(p) {
             if (p._imageData && p._imageData.length > 50 && p._imageData.indexOf('data:image/') === 0) {
               try { localStorage.setItem('lb_img_' + p.id, p._imageData); } catch(e) {}
             }
@@ -284,6 +284,17 @@ function fetchProductsFromServer() {
             if (p.qty === undefined) p.qty = 0;
             return p;
           });
+          defaultProducts.forEach(function(dp) {
+            var found = false;
+            for (var i = 0; i < serverProducts.length; i++) {
+              if (serverProducts[i].id === dp.id) { found = true; break; }
+            }
+            if (!found) {
+              var copy = JSON.parse(JSON.stringify(dp));
+              serverProducts.push(copy);
+            }
+          });
+          products = serverProducts;
           localStorage.setItem('lb_products', JSON.stringify(products));
           renderProducts();
           renderProductsTable();
