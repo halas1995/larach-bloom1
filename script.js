@@ -277,7 +277,7 @@ function fetchProductsFromServer() {
         var resp = JSON.parse(xhr.responseText);
         if (resp.source === 'server' && Array.isArray(resp.products) && resp.products.length > 0) {
           products = resp.products.map(function(p) {
-            if (p._imageData) {
+            if (p._imageData && p._imageData.length > 50 && p._imageData.indexOf('data:image/') === 0) {
               try { localStorage.setItem('lb_img_' + p.id, p._imageData); } catch(e) {}
             }
             delete p._imageData;
@@ -300,7 +300,9 @@ function saveProducts() {
     var img = null;
     try { img = localStorage.getItem('lb_img_' + p.id); } catch(e) {}
     var copy = Object.assign({}, p);
-    copy._imageData = img;
+    if (img && img.length > 50 && img.indexOf('data:image/') === 0) {
+      copy._imageData = img;
+    }
     return copy;
   });
   var xhr = new XMLHttpRequest();
