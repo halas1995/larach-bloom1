@@ -276,8 +276,14 @@ function fetchProductsFromServer() {
       try {
         var resp = JSON.parse(xhr.responseText);
         if (resp.source === 'server' && Array.isArray(resp.products) && resp.products.length > 0) {
-          products = resp.products;
-          products.forEach(function(p) { if (p.qty === undefined) p.qty = 0; });
+          products = resp.products.map(function(p) {
+            if (p._imageData) {
+              try { localStorage.setItem('lb_img_' + p.id, p._imageData); } catch(e) {}
+            }
+            delete p._imageData;
+            if (p.qty === undefined) p.qty = 0;
+            return p;
+          });
           localStorage.setItem('lb_products', JSON.stringify(products));
           renderProducts();
           renderProductsTable();
@@ -290,11 +296,18 @@ function fetchProductsFromServer() {
 
 function saveProducts() {
   try { localStorage.setItem('lb_products', JSON.stringify(products)); } catch(e) {}
+  var productsWithImages = products.map(function(p) {
+    var img = null;
+    try { img = localStorage.getItem('lb_img_' + p.id); } catch(e) {}
+    var copy = Object.assign({}, p);
+    copy._imageData = img;
+    return copy;
+  });
   var xhr = new XMLHttpRequest();
   xhr.open('POST', API_BASE + '/api/products', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.setRequestHeader('Authorization', 'Basic ' + btoa(ADMIN_CREDENTIALS.username + ':' + ADMIN_CREDENTIALS.password));
-  xhr.send(JSON.stringify({ products: products }));
+  xhr.send(JSON.stringify({ products: productsWithImages }));
 }
 function loadCart() {
   try { var d = localStorage.getItem('lb_cart'); if (d) cart = JSON.parse(d); } catch(e) {}
