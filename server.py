@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, sys, json, base64, hashlib, hmac, time, re
+import os, sys, json, base64, hashlib, hmac, time, re, uuid
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime, timezone
 from urllib.parse import urlparse, parse_qs
@@ -101,6 +101,29 @@ class Handler(SimpleHTTPRequestHandler):
       except: return self.send_err(400, 'Invalid JSON')
       save_products(data.get('products', []))
       self.send_json({ 'success': True })
+    elif re.match(r'^/api/upload-image/\d+$', self.path):
+      if not auth_ok(self.headers): return self.send_err(401, 'Unauthorized')
+      length = int(self.headers.get('Content-Length', 0))
+      body = self.rfile.read(length) if length else b'{}'
+      try: data = json.loads(body)
+      except: return self.send_err(400, 'Invalid JSON')
+      img_data = data.get('image', '')
+      if not img_data or not img_data.startswith('data:image/'):
+        return self.send_err(400, 'Invalid image data')
+      try:
+        header, encoded = img_data.split(',', 1)
+        ext = header.split(';')[0].split('/')[-1]
+        if ext not in ('jpeg', 'jpg', 'png', 'gif', 'webp'): ext = 'jpg'
+        decoded = base64.b64decode(encoded)
+        product_id = self.path.split('/')[-1]
+        media_dir = os.path.join(ROOT, 'assets', 'media')
+        os.makedirs(media_dir, exist_ok=True)
+        filename = f'product-{product_id}.{ext}'
+        filepath = os.path.join(media_dir, filename)
+        with open(filepath, 'wb') as f: f.write(decoded)
+        self.send_json({ 'success': True, 'path': f'assets/media/{filename}' })
+      except Exception as e:
+        self.send_err(500, str(e))
     else:
       self.send_err(404, 'Not found')
 
