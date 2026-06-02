@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, sys, json, base64, hashlib, hmac, time, re, uuid
+import os, sys, json, base64, hashlib, hmac, time, re
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime, timezone
 from urllib.parse import urlparse, parse_qs
