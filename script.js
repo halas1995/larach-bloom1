@@ -611,7 +611,6 @@ function apiOrder(method, id, data, cb) {
 }
 
 function renderProductsTable() {
-  loadProducts();
   var tbody = document.getElementById('productsBody');
   if (!tbody) return;
   tbody.innerHTML = '';
