@@ -124,6 +124,23 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_json({ 'success': True, 'path': f'assets/media/{filename}' })
       except Exception as e:
         self.send_err(500, str(e))
+    elif re.match(r'^/api/upload-file/', self.path):
+      if not auth_ok(self.headers): return self.send_err(401, 'Unauthorized')
+      filename = self.path.split('/')[-1]
+      if not filename: return self.send_err(400, 'No filename')
+      length = int(self.headers.get('Content-Length', 0))
+      if length == 0: return self.send_err(400, 'Empty file')
+      media_dir = os.path.join(ROOT, 'assets', 'media')
+      os.makedirs(media_dir, exist_ok=True)
+      filepath = os.path.join(media_dir, filename)
+      with open(filepath, 'wb') as f:
+          remaining = length
+          while remaining > 0:
+              chunk = self.rfile.read(min(65536, remaining))
+              if not chunk: break
+              f.write(chunk)
+              remaining -= len(chunk)
+      self.send_json({ 'success': True })
     else:
       self.send_err(404, 'Not found')
 
