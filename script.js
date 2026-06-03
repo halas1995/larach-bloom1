@@ -1,13 +1,15 @@
-const defaultProducts = [
-  { id: 1, name: "Gommage \u00e0 la fleur d'oranger", price: 120, qty: 50, image: "assets/media/product-1.png", desc: "Gommage doux \u00e0 la fleur d'oranger pour une peau \u00e9clatante.", cat: "corps" },
-  { id: 2, name: "Huile s\u00e8che \u00e0 la fleur d'oranger", price: 150, qty: 50, image: "assets/media/product-6.png", desc: "Huile s\u00e8che nourrissante au parfum d\u00e9licat de fleur d'oranger.", cat: "huiles" },
-  { id: 3, name: "Gel douche \u00e0 la fleur d'oranger", price: 120, qty: 50, image: "assets/media/product-3.png", desc: "Gel douche onctueux \u00e0 la fleur d'oranger pour un bain sensoriel.", cat: "corps" },
-  { id: 4, name: "Alba - pack complet", price: 350, qty: 50, image: "assets/media/product-9.png", desc: "Pack complet de soins \u00e0 la fleur d'oranger : gommage, huile et gel douche.", cat: "coffrets" }
-];
-
 const EMAIL_CONFIG = { publicKey: 'REMPLACEZ_PAR_VOTRE_CLE_PUBLIQUE_EMAILJS', serviceID: 'REMPLACEZ_PAR_VOTRE_SERVICE_ID', templateID: 'REMPLACEZ_PAR_VOTRE_TEMPLATE_ID', toEmail: 'LARACHBLOOM@GMAIL.COM' };
 const ADMIN_CREDENTIALS = { username: 'admin', password: 'larachbloom' };
 const API_BASE = '';
+const DELIVERY_FEE = 35;
+const DELIVERY_CITIES = [
+  'B\u00e9ni Mellal', 'Khouribga', 'Berrechid', 'Settat', 'Had Soualem',
+  'Bouznika', 'Sidi Rahal', 'El Jadida', 'Benslimane', 'F\u00e8s',
+  'Mekn\u00e8s', 'Nador', 'Oujda', 'Marrakech', 'Essaouira',
+  'Safi', 'Rabat', 'K\u00e9nitra', 'Sal\u00e9', 'T\u00e9mara',
+  'Agadir', 'A\u00eft Melloul', 'Inzegane', 'Tanger'
+];
+let deliveryFee = 0;
 
 let lang = localStorage.getItem('lb_lang') || 'fr';
 
@@ -34,7 +36,8 @@ const TRANS = {
     productSub: "Soins naturels inspir\u00e9s de la tradition marocaine",
     contactBtn: "Contact", contactInfo: "Contact Info",
     checkoutFormTitle: "Informations de livraison", checkoutSubtotal: "Sous-total",
-    checkoutShipping: "Livraison", checkoutFree: "À communiquer",
+    checkoutCity: "Ville", checkoutCityPH: "S\u00e9lectionnez votre ville",
+    checkoutShipping: "Livraison", checkoutFree: "Non d\u00e9finie", checkoutDeliveryLabel: "Frais de livraison",
     checkoutCodLabel: "Paiement \u00e0 la livraison (COD)",
     checkoutCodDesc: "Payez en esp\u00e8ces \u00e0 la r\u00e9ception de votre commande",
     checkoutPaymentMethod: "Mode de paiement", checkoutCodBadge: "Paiement en esp\u00e8ces \u00e0 la livraison",
@@ -46,10 +49,6 @@ const TRANS = {
     backToProducts: "Retour aux produits",
     qtyLabel: "Quantit\u00e9",
     pageTitle: "Accueil", pageTitleProducts: "Produits", pageTitleCheckout: "Commande", pageTitleContact: "Contact", pageTitleAdmin: "Administration",
-    p1_name: "Gommage \u00e0 la fleur d'oranger", p1_desc: "Gommage doux \u00e0 la fleur d'oranger pour une peau \u00e9clatante.",
-    p2_name: "Huile s\u00e8che \u00e0 la fleur d'oranger", p2_desc: "Huile s\u00e8che nourrissante au parfum d\u00e9licat de fleur d'oranger.",
-    p3_name: "Gel douche \u00e0 la fleur d'oranger", p3_desc: "Gel douche onctueux \u00e0 la fleur d'oranger pour un bain sensoriel.",
-    p4_name: "Alba - pack complet", p4_desc: "Pack complet de soins \u00e0 la fleur d'oranger : gommage, huile et gel douche.",
     checkoutFirstNamePH: "Votre pr\u00e9nom", checkoutLastNamePH: "Votre nom",
     checkoutPhonePH: "06 XX XX XX XX", checkoutEmailPH: "votre@email.com",
     checkoutAddressPH: "Ville, quartier, rue, num\u00e9ro...", checkoutNotesPH: "Instructions de livraison...",
@@ -96,7 +95,8 @@ const TRANS = {
     productSub: "Natural care inspired by Moroccan tradition",
     contactBtn: "Contact", contactInfo: "Contact Info",
     checkoutFormTitle: "Delivery Information", checkoutSubtotal: "Subtotal",
-    checkoutShipping: "Shipping", checkoutFree: "To be communicated",
+    checkoutCity: "City", checkoutCityPH: "Select your city",
+    checkoutShipping: "Shipping", checkoutFree: "Not set", checkoutDeliveryLabel: "Delivery fee",
     checkoutCodLabel: "Cash on delivery (COD)",
     checkoutCodDesc: "Pay in cash upon receipt of your order",
     checkoutPaymentMethod: "Payment method", checkoutCodBadge: "Cash payment on delivery",
@@ -108,10 +108,7 @@ const TRANS = {
     backToProducts: "Back to products",
     qtyLabel: "Quantity",
     pageTitle: "Home", pageTitleProducts: "Products", pageTitleCheckout: "Checkout", pageTitleContact: "Contact", pageTitleAdmin: "Administration",
-    p1_name: "Orange Blossom Scrub", p1_desc: "Gentle orange blossom scrub for radiant skin.",
-    p2_name: "Orange Blossom Dry Oil", p2_desc: "Nourishing dry oil with a delicate orange blossom fragrance.",
-    p3_name: "Orange Blossom Shower Gel", p3_desc: "Creamy orange blossom shower gel for a sensory bath.",
-    p4_name: "Alba - Full Set", p4_desc: "Complete orange blossom care set: scrub, oil, and shower gel.",
+
     checkoutFirstNamePH: "Your first name", checkoutLastNamePH: "Your last name",
     checkoutPhonePH: "06 XX XX XX XX", checkoutEmailPH: "your@email.com",
     checkoutAddressPH: "City, district, street, number...", checkoutNotesPH: "Delivery instructions...",
@@ -158,7 +155,8 @@ const TRANS = {
     productSub: "\u0639\u0646\u0627\u064a\u0629 \u0637\u0628\u064a\u0639\u064a\u0629 \u0645\u0633\u062a\u0648\u062d\u0627\u0629 \u0645\u0646 \u0627\u0644\u062a\u0642\u0627\u0644\u064a\u062f \u0627\u0644\u0645\u063a\u0631\u0628\u064a\u0629",
     contactBtn: "\u0627\u062a\u0635\u0644 \u0628\u0646\u0627", contactInfo: "\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u0627\u062a\u0635\u0627\u0644",
     checkoutFormTitle: "\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u062a\u0648\u0635\u064a\u0644", checkoutSubtotal: "\u0627\u0644\u0645\u062c\u0645\u0648\u0639 \u0627\u0644\u0641\u0631\u0639\u064a",
-    checkoutShipping: "\u0627\u0644\u062a\u0648\u0635\u064a\u0644", checkoutFree: "\u0633\u064a\u062a\u0645 \u0627\u0644\u0625\u0639\u0644\u0627\u0646 \u0639\u0646\u0647 \u0644\u0627\u062d\u0642\u064b\u0627",
+    checkoutCity: "\u0627\u0644\u0645\u062f\u064a\u0646\u0629", checkoutCityPH: "\u0627\u062e\u062a\u0631 \u0645\u062f\u064a\u0646\u062a\u0643",
+    checkoutShipping: "\u0627\u0644\u062a\u0648\u0635\u064a\u0644", checkoutFree: "\u063a\u064a\u0631 \u0645\u062d\u062f\u062f", checkoutDeliveryLabel: "\u0631\u0633\u0648\u0645 \u0627\u0644\u062a\u0648\u0635\u064a\u0644",
     checkoutCodLabel: "\u0627\u0644\u062f\u0641\u0639 \u0639\u0646\u062f \u0627\u0644\u0627\u0633\u062a\u0644\u0627\u0645",
     checkoutCodDesc: "\u0627\u062f\u0641\u0639 \u0646\u0642\u062f\u064b\u0627 \u0639\u0646\u062f \u0627\u0633\u062a\u0644\u0627\u0645 \u0637\u0644\u0628\u0643",
     checkoutPaymentMethod: "\u0637\u0631\u064a\u0642\u0629 \u0627\u0644\u062f\u0641\u0639", checkoutCodBadge: "\u0627\u0644\u062f\u0641\u0639 \u0646\u0642\u062f\u064b\u0627 \u0639\u0646\u062f \u0627\u0644\u0627\u0633\u062a\u0644\u0627\u0645",
@@ -170,10 +168,7 @@ const TRANS = {
     backToProducts: "\u0627\u0644\u0639\u0648\u062f\u0629 \u0625\u0644\u0649 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a",
     qtyLabel: "\u0627\u0644\u0643\u0645\u064a\u0629",
     pageTitle: "\u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629", pageTitleProducts: "\u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a", pageTitleCheckout: "\u0627\u0644\u0637\u0644\u0628", pageTitleContact: "\u0627\u062a\u0635\u0627\u0644", pageTitleAdmin: "\u0625\u062f\u0627\u0631\u0629",
-    p1_name: "\u0645\u0642\u0634\u0631 \u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644", p1_desc: "\u0645\u0642\u0634\u0631 \u0644\u0637\u064a\u0641 \u0628\u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644 \u0644\u0628\u0634\u0631\u0629 \u0645\u0634\u0631\u0642\u0629.",
-    p2_name: "\u0632\u064a\u062a \u062c\u0627\u0641 \u0628\u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644", p2_desc: "\u0632\u064a\u062a \u062c\u0627\u0641 \u0645\u063a\u0630\u064d \u0628\u0631\u0627\u0626\u062d\u0629 \u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644 \u0627\u0644\u0631\u0642\u064a\u0642\u0629.",
-    p3_name: "\u062c\u0644 \u0627\u0633\u062a\u062d\u0645\u0627\u0645 \u0628\u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644", p3_desc: "\u062c\u0644 \u0627\u0633\u062a\u062d\u0645\u0627\u0645 \u0643\u0631\u064a\u0645\u064a \u0628\u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644 \u0644\u062d\u0645\u0627\u0645 \u062d\u0633\u064a.",
-    p4_name: "\u0623\u0644\u0628\u0627 - \u0627\u0644\u0645\u062c\u0645\u0648\u0639\u0629 \u0627\u0644\u0643\u0627\u0645\u0644\u0629", p4_desc: "\u0645\u062c\u0645\u0648\u0639\u0629 \u0639\u0646\u0627\u064a\u0629 \u0643\u0627\u0645\u0644\u0629 \u0628\u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644: \u0645\u0642\u0634\u0631\u060c \u0632\u064a\u062a\u060c \u0648\u062c\u0644 \u0627\u0633\u062a\u062d\u0645\u0627\u0645.",
+
     checkoutFirstNamePH: "\u0627\u0633\u0645\u0643 \u0627\u0644\u0623\u0648\u0644", checkoutLastNamePH: "\u0627\u0633\u0645 \u0627\u0644\u0639\u0627\u0626\u0644\u0629",
     checkoutPhonePH: "\u06F0\u06F6 XX XX XX XX", checkoutEmailPH: "\u0628\u0631\u064a\u062f\u0643@\u0645\u0648\u0642\u0639.\u0643\u0648\u0645",
     checkoutAddressPH: "\u0627\u0644\u0645\u062f\u064a\u0646\u0629\u060c \u0627\u0644\u062d\u064a\u060c \u0627\u0644\u0634\u0627\u0631\u0639\u060c \u0627\u0644\u0631\u0642\u0645...", checkoutNotesPH: "\u062a\u0639\u0644\u064a\u0645\u0627\u062a \u0627\u0644\u062a\u0648\u0635\u064a\u0644...",
@@ -270,9 +265,9 @@ let orders = [];
 function loadProducts() {
   try {
     var d = localStorage.getItem('lb_products');
-    if (d) { products = JSON.parse(d); if (products.length === 0) { products = JSON.parse(JSON.stringify(defaultProducts)); localStorage.setItem('lb_products', JSON.stringify(products)); } }
-    else { products = JSON.parse(JSON.stringify(defaultProducts)); localStorage.setItem('lb_products', JSON.stringify(products)); }
-  } catch(e) { products = JSON.parse(JSON.stringify(defaultProducts)); }
+    if (d) { products = JSON.parse(d); }
+    else { products = []; localStorage.setItem('lb_products', JSON.stringify(products)); }
+  } catch(e) { products = []; }
   products.forEach(function(p) { if (p.qty === undefined) p.qty = 0; });
   fetchProductsFromServer();
 }
@@ -284,21 +279,11 @@ function fetchProductsFromServer() {
     if (xhr.status === 200) {
       try {
         var resp = JSON.parse(xhr.responseText);
-        if (resp.source === 'server' && Array.isArray(resp.products) && resp.products.length > 0) {
+        if (resp.source === 'server' && Array.isArray(resp.products)) {
           var serverProducts = resp.products.map(function(p) {
             delete p._imageData;
             if (p.qty === undefined) p.qty = 0;
             return p;
-          });
-          defaultProducts.forEach(function(dp) {
-            var found = false;
-            for (var i = 0; i < serverProducts.length; i++) {
-              if (serverProducts[i].id === dp.id) { found = true; break; }
-            }
-            if (!found) {
-              var copy = JSON.parse(JSON.stringify(dp));
-              serverProducts.push(copy);
-            }
           });
           products = serverProducts;
           localStorage.setItem('lb_products', JSON.stringify(products));
@@ -516,11 +501,13 @@ function closeCart() {
 function renderSummary() {
   var container = document.getElementById('summaryItems');
   var subEl = document.getElementById('summarySubtotal');
+  var shipEl = document.getElementById('summaryShipping');
   var totalEl = document.getElementById('summaryTotal');
   if (!container) return;
   if (!cart.length) {
     container.innerHTML = '<div class="cart-empty">' + esc(t('cartEmpty')) + '</div>';
     if (subEl) subEl.textContent = fmt(0);
+    if (shipEl) shipEl.textContent = t('checkoutFree');
     if (totalEl) totalEl.textContent = fmt(0);
     return;
   }
@@ -535,8 +522,10 @@ function renderSummary() {
     '<div class="summary-item-price">' + fmt(x.price * x.qty) + '</div>' +
   '</div>'; }).join('');
   var totalPrice = total();
+  var shipText = deliveryFee > 0 ? fmt(deliveryFee) : t('checkoutFree');
   if (subEl) subEl.textContent = fmt(totalPrice);
-  if (totalEl) totalEl.textContent = fmt(totalPrice);
+  if (shipEl) shipEl.textContent = shipText;
+  if (totalEl) totalEl.textContent = fmt(totalPrice + deliveryFee);
 }
 
 function showTab(name) {
@@ -848,10 +837,23 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeof emailjs !== 'undefined') emailjs.init(EMAIL_CONFIG.publicKey);
     renderSummary();
     updateCart();
+    var citySel = document.getElementById('checkoutCity');
+    if (citySel) {
+      DELIVERY_CITIES.forEach(function(c) {
+        var opt = document.createElement('option');
+        opt.value = c; opt.textContent = c;
+        citySel.appendChild(opt);
+      });
+      citySel.addEventListener('change', function() {
+        deliveryFee = this.value ? DELIVERY_FEE : 0;
+        renderSummary();
+      });
+    }
     var form = document.getElementById('checkoutForm');
     if (form) {
       form.addEventListener('submit', function(e) {
         e.preventDefault();
+        var city = citySel ? citySel.value : '';
         var order = {
           customer: {
             firstName: document.getElementById('firstName').value.trim(),
@@ -859,10 +861,11 @@ document.addEventListener('DOMContentLoaded', function() {
             phone: document.getElementById('phone').value.trim(),
             email: document.getElementById('email').value.trim(),
             address: document.getElementById('address').value.trim(),
+            city: city,
             notes: document.getElementById('notes').value.trim()
           },
           items: cart.map(function(i) { return { id: i.id, name: i.name, price: i.price, qty: i.qty }; }),
-          total: total(),
+          total: total() + deliveryFee,
           payment: 'COD'
         };
         var btn = form.querySelector('button[type="submit"]');

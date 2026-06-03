@@ -60,7 +60,13 @@
             </div>
             <div class="field">
               <label for="address" data-i18n="checkoutAddress">Adresse compl\u00e8te</label>
-              <textarea id="address" name="address" rows="3" data-i18n-placeholder="checkoutAddressPH" placeholder="Ville, quartier, rue, num\u00e9ro..." required></textarea>
+              <textarea id="address" name="address" rows="2" data-i18n-placeholder="checkoutAddressPH" placeholder="Quartier, rue, num\u00e9ro..." required></textarea>
+            </div>
+            <div class="field">
+              <label for="checkoutCity" data-i18n="checkoutCity">Ville</label>
+              <select id="checkoutCity" name="city" required>
+                <option value="" data-i18n="checkoutCityPH">S\u00e9lectionnez votre ville</option>
+              </select>
             </div>
             <div class="field">
               <label for="notes" data-i18n="checkoutNotes">Notes (optionnel)</label>
@@ -93,8 +99,8 @@
               <span id="summarySubtotal">0 DH</span>
             </div>
             <div class="summary-line">
-              <span data-i18n="checkoutShipping">Livraison</span>
-              <span data-i18n="checkoutFree">Gratuite</span>
+              <span data-i18n="checkoutDeliveryLabel">Frais de livraison</span>
+              <span id="summaryShipping">--</span>
             </div>
             <div class="summary-line total">
               <span data-i18n="cartTotal">Total</span>
