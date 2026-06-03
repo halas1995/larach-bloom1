@@ -1,13 +1,31 @@
 const EMAIL_CONFIG = { publicKey: 'REMPLACEZ_PAR_VOTRE_CLE_PUBLIQUE_EMAILJS', serviceID: 'REMPLACEZ_PAR_VOTRE_SERVICE_ID', templateID: 'REMPLACEZ_PAR_VOTRE_TEMPLATE_ID', toEmail: 'LARACHBLOOM@GMAIL.COM' };
 const ADMIN_CREDENTIALS = { username: 'admin', password: 'larachbloom' };
 const API_BASE = '';
-const DELIVERY_FEE = 35;
-const DELIVERY_CITIES = [
-  'B\u00e9ni Mellal', 'Khouribga', 'Berrechid', 'Settat', 'Had Soualem',
-  'Bouznika', 'Sidi Rahal', 'El Jadida', 'Benslimane', 'F\u00e8s',
-  'Mekn\u00e8s', 'Nador', 'Oujda', 'Marrakech', 'Essaouira',
-  'Safi', 'Rabat', 'K\u00e9nitra', 'Sal\u00e9', 'T\u00e9mara',
-  'Agadir', 'A\u00eft Melloul', 'Inzegane', 'Tanger'
+const DELIVERY = [
+  // 35 DH
+  {n:'B\u00e9ni Mellal',f:35},{n:'Khouribga',f:35},{n:'Berrechid',f:35},{n:'Settat',f:35},{n:'Had Soualem',f:35},
+  {n:'Bouznika',f:35},{n:'Sidi Rahal',f:35},{n:'El Jadida',f:35},{n:'Benslimane',f:35},{n:'F\u00e8s',f:35},
+  {n:'Mekn\u00e8s',f:35},{n:'Nador',f:35},{n:'Oujda',f:35},{n:'Marrakech',f:35},{n:'Essaouira',f:35},
+  {n:'Safi',f:35},{n:'Rabat',f:35},{n:'K\u00e9nitra',f:35},{n:'Sal\u00e9',f:35},{n:'T\u00e9mara',f:35},
+  {n:'Agadir',f:35},{n:'A\u00eft Melloul',f:35},{n:'Inzegane',f:35},{n:'Tanger',f:35},
+  // 39 DH
+  {n:'B\u00e9ja\u00e2d',f:39},{n:'Boujniba',f:39},{n:'Kasba Tadla',f:39},{n:'Kh\u00e9nifra',f:39},{n:'Mrirt',f:39},
+  {n:'Oued Zem',f:39},{n:'El Gara',f:39},{n:'Azemmour',f:39},{n:'Sidi Bennour',f:39},{n:'Dakhla',f:39},
+  {n:'Ouarzazate',f:39},{n:'Taza',f:39},{n:'Taounate',f:39},{n:'Guelmim',f:39},{n:'Berkane',f:39},
+  {n:'Guercif',f:39},{n:'La\u00e2youne',f:39},{n:'Benguerir',f:39},{n:'Chichaoua',f:39},{n:'Youssoufia',f:39},
+  {n:'Oualidia',f:39},{n:'Harhoura',f:39},{n:'Mehdia',f:39},{n:'Kh\u00e9misset',f:39},{n:'A\u00efn El Aouda',f:39},
+  {n:'A\u00efn Attig',f:39},{n:'Sala Al Jadida',f:39},{n:'Skhirat',f:39},{n:'Tamesna',f:39},{n:'Tiflet',f:39},
+  {n:'Sidi Bouknadel',f:39},{n:'Biougra',f:39},{n:'Anza',f:39},{n:'Drarga',f:39},{n:'Oulad Teima',f:39},
+  {n:'Taroudant',f:39},{n:'Tiznit',f:39},{n:'Al Hoceima',f:39},{n:'Fnideq',f:39},{n:'Martil',f:39},
+  {n:'Assilah',f:39},{n:'Chefchaouen',f:39},{n:'Ksar El Kebir',f:39},{n:'Larache',f:39},{n:'M\u2019diq',f:39},
+  {n:'T\u00e9touan',f:39},
+  // 45 DH
+  {n:'Azilal',f:45},{n:'Fquih Ben Salah',f:45},{n:'Errachidia',f:45},{n:'Midelt',f:45},{n:'Rissani',f:45},
+  {n:'Tinghir',f:45},{n:'Zagora',f:45},{n:'Ifrane',f:45},{n:'Sefrou',f:45},{n:'El Hajeb',f:45},
+  {n:'Sidi Ifni',f:45},{n:'Tan-Tan',f:45},{n:'Ahfir',f:45},{n:'Taourirt',f:45},{n:'Jerada',f:45},
+  {n:'Zaio',f:45},{n:'Driouch',f:45},{n:'Midar',f:45},{n:'Figuig',f:45},{n:'Bouarfa',f:45},
+  {n:'Demnate',f:45},{n:'Mechra Bel Ksiri',f:45},{n:'Moulay Bousselham',f:45},{n:'Sidi Kacem',f:45},{n:'Sidi Slimane',f:45},
+  {n:'Souk El Arbaa',f:45},{n:'Mirleft',f:45},{n:'Tata',f:45},{n:'Taghazout',f:45},{n:'Ouazzane',f:45}
 ];
 let deliveryFee = 0;
 
@@ -839,13 +857,14 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCart();
     var citySel = document.getElementById('checkoutCity');
     if (citySel) {
-      DELIVERY_CITIES.forEach(function(c) {
+      DELIVERY.forEach(function(d) {
         var opt = document.createElement('option');
-        opt.value = c; opt.textContent = c;
+        opt.value = d.n; opt.textContent = d.n;
         citySel.appendChild(opt);
       });
       citySel.addEventListener('change', function() {
-        deliveryFee = this.value ? DELIVERY_FEE : 0;
+        var found = DELIVERY.find(function(d) { return d.n === this.value; }.bind(this));
+        deliveryFee = found ? found.f : 0;
         renderSummary();
       });
     }
