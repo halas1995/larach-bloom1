@@ -35,6 +35,9 @@ const TRANS = {
     sending: "Envoi en cours...",
     addToCart: "Ajouter au panier", removeItem: "Retirer",
     waOrder: "Bonjour, je suis int\u00e9ress\u00e9 par",
+    waOrder2: "Commander via WhatsApp",
+    backToProducts: "Retour aux produits",
+    qtyLabel: "Quantit\u00e9",
     pageTitle: "Accueil", pageTitleProducts: "Produits", pageTitleCheckout: "Commande", pageTitleContact: "Contact", pageTitleAdmin: "Administration",
     p1_name: "Gommage \u00e0 la fleur d'oranger", p1_desc: "Gommage doux \u00e0 la fleur d'oranger pour une peau \u00e9clatante.",
     p2_name: "Huile s\u00e8che \u00e0 la fleur d'oranger", p2_desc: "Huile s\u00e8che nourrissante au parfum d\u00e9licat de fleur d'oranger.",
@@ -94,6 +97,9 @@ const TRANS = {
     sending: "Sending...",
     addToCart: "Add to cart", removeItem: "Remove",
     waOrder: "Hello, I am interested in",
+    waOrder2: "Order via WhatsApp",
+    backToProducts: "Back to products",
+    qtyLabel: "Quantity",
     pageTitle: "Home", pageTitleProducts: "Products", pageTitleCheckout: "Checkout", pageTitleContact: "Contact", pageTitleAdmin: "Administration",
     p1_name: "Orange Blossom Scrub", p1_desc: "Gentle orange blossom scrub for radiant skin.",
     p2_name: "Orange Blossom Dry Oil", p2_desc: "Nourishing dry oil with a delicate orange blossom fragrance.",
@@ -153,6 +159,9 @@ const TRANS = {
     sending: "\u062c\u0627\u0631\u064d \u0627\u0644\u0625\u0631\u0633\u0627\u0644...",
     addToCart: "\u0623\u0636\u0641 \u0625\u0644\u0649 \u0627\u0644\u0633\u0644\u0629", removeItem: "\u0625\u0632\u0627\u0644\u0629",
     waOrder: "\u0645\u0631\u062d\u0628\u0627\u064b\u060c \u0623\u0646\u0627 \u0645\u0647\u062a\u0645 \u0628\u0640",
+    waOrder2: "\u0627\u0644\u0637\u0644\u0628 \u0639\u0628\u0631 \u0648\u0627\u062a\u0633\u0627\u0628",
+    backToProducts: "\u0627\u0644\u0639\u0648\u062f\u0629 \u0625\u0644\u0649 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a",
+    qtyLabel: "\u0627\u0644\u0643\u0645\u064a\u0629",
     pageTitle: "\u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629", pageTitleProducts: "\u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a", pageTitleCheckout: "\u0627\u0644\u0637\u0644\u0628", pageTitleContact: "\u0627\u062a\u0635\u0627\u0644", pageTitleAdmin: "\u0625\u062f\u0627\u0631\u0629",
     p1_name: "\u0645\u0642\u0634\u0631 \u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644", p1_desc: "\u0645\u0642\u0634\u0631 \u0644\u0637\u064a\u0641 \u0628\u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644 \u0644\u0628\u0634\u0631\u0629 \u0645\u0634\u0631\u0642\u0629.",
     p2_name: "\u0632\u064a\u062a \u062c\u0627\u0641 \u0628\u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644", p2_desc: "\u0632\u064a\u062a \u062c\u0627\u0641 \u0645\u063a\u0630\u064d \u0628\u0631\u0627\u0626\u062d\u0629 \u0632\u0647\u0631\u0629 \u0627\u0644\u0628\u0631\u062a\u0642\u0627\u0644 \u0627\u0644\u0631\u0642\u064a\u0642\u0629.",
@@ -376,11 +385,13 @@ function renderProducts() {
     img.src = getProductImage(p);
     img.alt = pname;
     img.loading = 'lazy';
+    img.style.cursor = 'pointer';
     img.onerror = function() {
       imgWrap.classList.add('img-fail');
       imgWrap.dataset.label = pname;
       img.remove();
     };
+    img.onclick = function() { window.location.href = 'product-detail.html?id=' + p.id; };
     imgWrap.appendChild(img);
     card.appendChild(imgWrap);
 
