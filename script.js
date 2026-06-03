@@ -798,12 +798,12 @@ function sendOrderEmail(order) {
     payment: 'Paiement \u00e0 la livraison (COD)'
   };
   var shopParams = Object.assign({}, baseParams, { to_email: EMAIL_CONFIG.toEmail, subject: 'Nouvelle commande #' + order.id });
-  emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateShop, shopParams, EMAIL_CONFIG.publicKey)
-    .then(function() {}, function() {});
+  emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateShop, shopParams)
+    .then(function() {}, function(e) { console.error('EmailJS shop error', e); });
   if (order.customer.email) {
     var clientParams = Object.assign({}, baseParams, { to_email: order.customer.email, subject: 'Confirmation commande #' + order.id + ' — LARACH BLOOM / \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628 #' + order.id });
-    emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateClient, clientParams, EMAIL_CONFIG.publicKey)
-      .then(function() {}, function() {});
+    emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateClient, clientParams)
+      .then(function() {}, function(e) { console.error('EmailJS client error', e); });
   }
 }
 
@@ -854,7 +854,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   if (page.includes('checkout')) {
-    if (typeof emailjs !== 'undefined') emailjs.init(EMAIL_CONFIG.publicKey);
+    if (typeof emailjs !== 'undefined') emailjs.init({ publicKey: EMAIL_CONFIG.publicKey });
     renderSummary();
     updateCart();
     var citySel = document.getElementById('checkoutCity');
