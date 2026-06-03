@@ -1,3 +1,10 @@
+const defaultProducts = [
+  { id: 1, name: "Gommage \u00e0 la fleur d'oranger", price: 120, qty: 50, image: "assets/media/product-1.png", desc: "Gommage doux \u00e0 la fleur d'oranger pour une peau \u00e9clatante.", cat: "corps" },
+  { id: 2, name: "Huile s\u00e8che \u00e0 la fleur d'oranger", price: 150, qty: 50, image: "assets/media/product-6.png", desc: "Huile s\u00e8che nourrissante au parfum d\u00e9licat de fleur d'oranger.", cat: "huiles" },
+  { id: 3, name: "Gel douche \u00e0 la fleur d'oranger", price: 120, qty: 50, image: "assets/media/product-3.png", desc: "Gel douche onctueux \u00e0 la fleur d'oranger pour un bain sensoriel.", cat: "corps" },
+  { id: 4, name: "Alba - pack complet", price: 350, qty: 50, image: "assets/media/product-9.png", desc: "Pack complet de soins \u00e0 la fleur d'oranger : gommage, huile et gel douche.", cat: "coffrets" }
+];
+
 const EMAIL_CONFIG = { publicKey: 'REMPLACEZ_PAR_VOTRE_CLE_PUBLIQUE_EMAILJS', serviceID: 'REMPLACEZ_PAR_VOTRE_SERVICE_ID', templateID: 'REMPLACEZ_PAR_VOTRE_TEMPLATE_ID', toEmail: 'LARACHBLOOM@GMAIL.COM' };
 const ADMIN_CREDENTIALS = { username: 'admin', password: 'larachbloom' };
 const API_BASE = '';
@@ -263,9 +270,9 @@ let orders = [];
 function loadProducts() {
   try {
     var d = localStorage.getItem('lb_products');
-    if (d) { products = JSON.parse(d); }
-    else { products = []; localStorage.setItem('lb_products', JSON.stringify(products)); }
-  } catch(e) { products = []; }
+    if (d) { products = JSON.parse(d); if (products.length === 0) { products = JSON.parse(JSON.stringify(defaultProducts)); localStorage.setItem('lb_products', JSON.stringify(products)); } }
+    else { products = JSON.parse(JSON.stringify(defaultProducts)); localStorage.setItem('lb_products', JSON.stringify(products)); }
+  } catch(e) { products = JSON.parse(JSON.stringify(defaultProducts)); }
   products.forEach(function(p) { if (p.qty === undefined) p.qty = 0; });
   fetchProductsFromServer();
 }
@@ -277,17 +284,24 @@ function fetchProductsFromServer() {
     if (xhr.status === 200) {
       try {
         var resp = JSON.parse(xhr.responseText);
-        if (resp.source === 'server' && Array.isArray(resp.products)) {
-          products = resp.products.map(function(p) {
+        if (resp.source === 'server' && Array.isArray(resp.products) && resp.products.length > 0) {
+          var serverProducts = resp.products.map(function(p) {
             delete p._imageData;
             if (p.qty === undefined) p.qty = 0;
             return p;
           });
-          if (products.length > 0) {
-            localStorage.setItem('lb_products', JSON.stringify(products));
-          } else {
-            localStorage.removeItem('lb_products');
-          }
+          defaultProducts.forEach(function(dp) {
+            var found = false;
+            for (var i = 0; i < serverProducts.length; i++) {
+              if (serverProducts[i].id === dp.id) { found = true; break; }
+            }
+            if (!found) {
+              var copy = JSON.parse(JSON.stringify(dp));
+              serverProducts.push(copy);
+            }
+          });
+          products = serverProducts;
+          localStorage.setItem('lb_products', JSON.stringify(products));
           renderProducts();
           renderProductsTable();
         }
