@@ -1,4 +1,4 @@
-const EMAIL_CONFIG = { publicKey: 'REMPLACEZ_PAR_VOTRE_CLE_PUBLIQUE_EMAILJS', serviceID: 'REMPLACEZ_PAR_VOTRE_SERVICE_ID', templateID: 'REMPLACEZ_PAR_VOTRE_TEMPLATE_ID', toEmail: 'LARACHBLOOM@GMAIL.COM' };
+const EMAIL_CONFIG = { publicKey: '5i3T8KSPg_2tDc35V', serviceID: 'service_pmvc0oe', templateShop: 'template_1el56ui', templateClient: 'template_81mfwow', toEmail: 'LARACHBLOOM@GMAIL.COM' };
 const ADMIN_CREDENTIALS = { username: 'admin', password: 'larachbloom' };
 const API_BASE = '';
 const DELIVERY = [
@@ -780,6 +780,7 @@ function deleteProduct(id) {
 
 function sendOrderEmail(order) {
   if (typeof emailjs === 'undefined') return;
+  var city = order.customer.city || '';
   var itemsHtml = order.items.map(function(i) {
     return i.name + ' x' + i.qty + ' \u2014 ' + (i.price * i.qty).toLocaleString('fr-FR') + ' DH';
   }).join('\n');
@@ -790,17 +791,18 @@ function sendOrderEmail(order) {
     customer_name: order.customer.firstName + ' ' + order.customer.lastName,
     customer_phone: order.customer.phone,
     customer_address: order.customer.address,
+    customer_city: city,
     customer_notes: order.customer.notes || 'Aucune',
     items: itemsHtml,
     total: order.total.toLocaleString('fr-FR') + ' DH',
     payment: 'Paiement \u00e0 la livraison (COD)'
   };
-  var storeParams = Object.assign({}, baseParams, { to_email: EMAIL_CONFIG.toEmail, subject: 'Nouvelle commande #' + order.id });
-  emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateID, storeParams, EMAIL_CONFIG.publicKey)
+  var shopParams = Object.assign({}, baseParams, { to_email: EMAIL_CONFIG.toEmail, subject: 'Nouvelle commande #' + order.id });
+  emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateShop, shopParams, EMAIL_CONFIG.publicKey)
     .then(function() {}, function() {});
   if (order.customer.email) {
-    var customerParams = Object.assign({}, baseParams, { to_email: order.customer.email, subject: 'Confirmation de commande #' + order.id + ' — LARACH BLOOM' });
-    emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateID, customerParams, EMAIL_CONFIG.publicKey)
+    var clientParams = Object.assign({}, baseParams, { to_email: order.customer.email, subject: 'Confirmation commande #' + order.id + ' — LARACH BLOOM / \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628 #' + order.id });
+    emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateClient, clientParams, EMAIL_CONFIG.publicKey)
       .then(function() {}, function() {});
   }
 }
