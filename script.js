@@ -799,11 +799,11 @@ function sendOrderEmail(order) {
   };
   var shopParams = Object.assign({}, baseParams, { to_email: EMAIL_CONFIG.toEmail, subject: 'Nouvelle commande #' + order.id });
   emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateShop, shopParams)
-    .then(function() {}, function(e) { console.error('EmailJS shop error', e); });
+    .then(function() { console.log('EmailJS shop OK'); }, function(e) { console.error('EmailJS shop error', e); alert('Email boutique erreur: ' + (e.text || e)); });
   if (order.customer.email) {
     var clientParams = Object.assign({}, baseParams, { to_email: order.customer.email, subject: 'Confirmation commande #' + order.id + ' — LARACH BLOOM / \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628 #' + order.id });
     emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateClient, clientParams)
-      .then(function() {}, function(e) { console.error('EmailJS client error', e); });
+      .then(function() { console.log('EmailJS client OK'); }, function(e) { console.error('EmailJS client error', e); alert('Email client erreur: ' + (e.text || e)); });
   }
 }
 
