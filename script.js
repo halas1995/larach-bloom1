@@ -5,7 +5,7 @@ const DELIVERY = [
   {n:'B\u00e9ni Mellal',f:35},{n:'Khouribga',f:35},{n:'Berrechid',f:35},{n:'Settat',f:35},{n:'Had Soualem',f:35},
   {n:'Bouznika',f:35},{n:'Sidi Rahal',f:35},{n:'El Jadida',f:35},{n:'Benslimane',f:35},{n:'F\u00e8s',f:35},
   {n:'Mekn\u00e8s',f:35},{n:'Nador',f:35},{n:'Oujda',f:35},{n:'Marrakech',f:35},{n:'Essaouira',f:35},
-  {n:'Safi',f:35},{n:'Rabat',f:35},{n:'K\u00e9nitra',f:35},{n:'Sal\u00e9',f:35},{n:'T\u00e9mara',f:35},
+   {n:'Safi',f:35},{n:'Casablanca',f:35},{n:'Rabat',f:35},{n:'K\u00e9nitra',f:35},{n:'Sal\u00e9',f:35},{n:'T\u00e9mara',f:35},
   {n:'Agadir',f:35},{n:'A\u00eft Melloul',f:35},{n:'Inzegane',f:35},{n:'Tanger',f:35},
   // 39 DH
   {n:'B\u00e9ja\u00e2d',f:39},{n:'Boujniba',f:39},{n:'Kasba Tadla',f:39},{n:'Kh\u00e9nifra',f:39},{n:'Mrirt',f:39},
