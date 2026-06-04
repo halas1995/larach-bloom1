@@ -180,8 +180,9 @@ if use_db:
       print(f'[LARACH] seed_media error: {e}')
 
   video_path = os.path.join(ROOT, 'assets', 'media', 'video-off.mp4')
-  seed_media('video-off', video_path, 'video/mp4',
-             fallback_url='https://larach-bloom.com/assets/media/video-off.mp4')
+  threading.Thread(target=seed_media, args=('video-off', video_path, 'video/mp4'),
+                   kwargs={'fallback_url': 'https://larach-bloom.com/assets/media/video-off.mp4'},
+                   daemon=True).start()
 else:
   print(f'[LARACH] Using JSON file storage')
   DATA_DIR = os.path.join(ROOT, 'data')
