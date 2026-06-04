@@ -320,10 +320,23 @@ class Handler(SimpleHTTPRequestHandler):
       key = parsed.path.split('/')[-1]
       self.serve_media(key)
     elif parsed.path == '/api/debug':
-      self.send_json({
+      info = {
         'use_db': use_db,
         'database_url_set': bool(os.environ.get('DATABASE_URL', '')),
-      })
+      }
+      if use_db:
+        try:
+          conn = get_db()
+          cur = conn.cursor()
+          cur.execute('SELECT COUNT(*) FROM products')
+          info['product_count'] = cur.fetchone()[0]
+          cur.execute('SELECT key FROM media')
+          info['media_keys'] = [r[0] for r in cur.fetchall()]
+          cur.close()
+          conn.close()
+        except Exception as e:
+          info['db_error'] = str(e)
+      self.send_json(info)
     else:
       super().do_GET()
 
