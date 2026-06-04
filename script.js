@@ -1,4 +1,3 @@
-const EMAIL_CONFIG = { publicKey: '5i3T8KSPg_2tDc35V', serviceID: 'service_pmvc0oe', templateShop: 'template_1el56ui', templateClient: 'template_81mfwow', toEmail: 'LARACHBLOOM@GMAIL.COM' };
 const ADMIN_CREDENTIALS = { username: 'admin', password: 'larachbloom' };
 const API_BASE = '';
 const DELIVERY = [
@@ -778,35 +777,6 @@ function deleteProduct(id) {
   saveProducts(); renderProductsTable();
 }
 
-function sendOrderEmail(order) {
-  if (typeof emailjs === 'undefined') return;
-  var city = order.customer.city || '';
-  var itemsHtml = order.items.map(function(i) {
-    return i.name + ' x' + i.qty + ' \u2014 ' + (i.price * i.qty).toLocaleString('fr-FR') + ' DH';
-  }).join('\n');
-  var baseParams = {
-    from_name: 'LARACH BLOOM',
-    order_id: order.id,
-    order_date: new Date(order.date).toLocaleString('fr-FR'),
-    customer_name: order.customer.firstName + ' ' + order.customer.lastName,
-    customer_phone: order.customer.phone,
-    customer_address: order.customer.address,
-    customer_city: city,
-    customer_notes: order.customer.notes || 'Aucune',
-    items: itemsHtml,
-    total: order.total.toLocaleString('fr-FR') + ' DH',
-    payment: 'Paiement \u00e0 la livraison (COD)'
-  };
-  var shopParams = Object.assign({}, baseParams, { to_email: EMAIL_CONFIG.toEmail, subject: 'Nouvelle commande #' + order.id });
-  emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateShop, shopParams)
-    .then(function() { console.log('EmailJS shop OK'); }, function(e) { console.error('EmailJS shop error', e); alert('Email boutique erreur: ' + (e.text || e)); });
-  if (order.customer.email) {
-    var clientParams = Object.assign({}, baseParams, { to_email: order.customer.email, subject: 'Confirmation commande #' + order.id + ' — LARACH BLOOM / \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628 #' + order.id });
-    emailjs.send(EMAIL_CONFIG.serviceID, EMAIL_CONFIG.templateClient, clientParams)
-      .then(function() { console.log('EmailJS client OK'); }, function(e) { console.error('EmailJS client error', e); alert('Email client erreur: ' + (e.text || e)); });
-  }
-}
-
 function handleLogin() {
   var u = document.getElementById('loginUser').value.trim();
   var p = document.getElementById('loginPass').value.trim();
@@ -854,7 +824,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   if (page.includes('checkout')) {
-    if (typeof emailjs !== 'undefined') emailjs.init({ publicKey: EMAIL_CONFIG.publicKey });
     renderSummary();
     updateCart();
     var citySel = document.getElementById('checkoutCity');
@@ -900,8 +869,6 @@ document.addEventListener('DOMContentLoaded', function() {
           if (data.success) {
             order.id = data.id;
             order.date = new Date().toISOString();
-            order.status = 'En attente';
-            sendOrderEmail(order);
             localStorage.removeItem('lb_cart');
             document.getElementById('successOverlay').classList.add('active');
             document.getElementById('orderRef').textContent = data.id;

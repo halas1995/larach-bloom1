@@ -1,47 +1,163 @@
 #!/usr/bin/env python3
-import os, sys, json, base64, hashlib, hmac, time, re
+import os, sys, json, base64, hashlib, hmac, time, re, smtplib, threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime, timezone
 from urllib.parse import urlparse, parse_qs
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 HOST = '0.0.0.0'
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else int(os.environ.get('PORT', '8080'))
 ROOT = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(ROOT, 'data')
-ORDERS_FILE = os.path.join(DATA_DIR, 'orders.json')
-PRODUCTS_FILE = os.path.join(DATA_DIR, 'products.json')
+
+SMTP_EMAIL = os.environ.get('SMTP_EMAIL', '')
+SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+DATABASE_URL = os.environ.get('DATABASE_URL', '')
 
 ADMIN_USER = 'admin'
 ADMIN_PASS = 'larachbloom'
 
-os.makedirs(DATA_DIR, exist_ok=True)
+use_db = bool(DATABASE_URL)
+if use_db:
+  import psycopg2
+  import psycopg2.extras
 
-def load_orders():
-  if not os.path.exists(ORDERS_FILE): return []
-  try:
-    with open(ORDERS_FILE, 'r', encoding='utf-8') as f: return json.load(f)
-  except: return []
+  def get_db():
+    return psycopg2.connect(DATABASE_URL, sslmode='require')
 
-def save_orders(orders):
-  with open(ORDERS_FILE, 'w', encoding='utf-8') as f: json.dump(orders, f, ensure_ascii=False, indent=2)
+  def init_db():
+    try:
+      conn = get_db()
+      cur = conn.cursor()
+      cur.execute('''
+        CREATE TABLE IF NOT EXISTS products (
+          id SERIAL PRIMARY KEY,
+          name TEXT NOT NULL DEFAULT '',
+          price REAL DEFAULT 0,
+          qty INTEGER DEFAULT 0,
+          image TEXT DEFAULT '',
+          desc_text TEXT DEFAULT '',
+          cat TEXT DEFAULT ''
+        )
+      ''')
+      cur.execute('''
+        CREATE TABLE IF NOT EXISTS orders (
+          id SERIAL PRIMARY KEY,
+          date_text TEXT NOT NULL,
+          status TEXT DEFAULT 'En attente',
+          customer_json TEXT DEFAULT '{}',
+          items_json TEXT DEFAULT '[]',
+          total REAL DEFAULT 0,
+          payment TEXT DEFAULT 'COD'
+        )
+      ''')
+      conn.commit()
+      cur.close()
+      conn.close()
+    except Exception as e:
+      print(f'DB init error: {e}')
 
-def load_products():
-  if not os.path.exists(PRODUCTS_FILE): return None
-  try:
-    with open(PRODUCTS_FILE, 'r', encoding='utf-8') as f: return json.load(f)
-  except: return None
+  def load_products():
+    try:
+      conn = get_db()
+      cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+      cur.execute('SELECT id, name, price, qty, image, desc_text AS desc, cat FROM products ORDER BY id')
+      rows = cur.fetchall()
+      cur.close()
+      conn.close()
+      return [dict(r) for r in rows]
+    except:
+      return None
 
-def save_products(products):
-  with open(PRODUCTS_FILE, 'w', encoding='utf-8') as f: json.dump(products, f, ensure_ascii=False, indent=2)
+  def save_products(prods):
+    try:
+      conn = get_db()
+      cur = conn.cursor()
+      cur.execute('DELETE FROM products')
+      for p in prods:
+        cur.execute('INSERT INTO products (id, name, price, qty, image, desc_text, cat) VALUES (%s,%s,%s,%s,%s,%s,%s)',
+          (p.get('id'), p.get('name',''), p.get('price',0), p.get('qty',0), p.get('image',''), p.get('desc',''), p.get('cat','')))
+      conn.commit()
+      cur.close()
+      conn.close()
+    except Exception as e:
+      print(f'save_products error: {e}')
+
+  def load_orders():
+    try:
+      conn = get_db()
+      cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+      cur.execute('SELECT id, date_text, status, customer_json, items_json, total, payment FROM orders ORDER BY id')
+      rows = cur.fetchall()
+      cur.close()
+      conn.close()
+      result = []
+      for r in rows:
+        d = dict(r)
+        d['date'] = d.pop('date_text')
+        d['customer'] = json.loads(d.pop('customer_json'))
+        d['items'] = json.loads(d.pop('items_json'))
+        d['id'] = int(d['id'])
+        d['total'] = float(d['total'])
+        result.append(d)
+      return result
+    except:
+      return []
+
+  def save_orders(orders):
+    try:
+      conn = get_db()
+      cur = conn.cursor()
+      cur.execute('DELETE FROM orders')
+      for o in orders:
+        cur.execute('INSERT INTO orders (id, date_text, status, customer_json, items_json, total, payment) VALUES (%s,%s,%s,%s,%s,%s,%s)',
+          (o.get('id'), o.get('date',''), o.get('status','En attente'), json.dumps(o.get('customer',{})), json.dumps(o.get('items',[])), o.get('total',0), o.get('payment','COD')))
+      conn.commit()
+      cur.close()
+      conn.close()
+    except Exception as e:
+      print(f'save_orders error: {e}')
+
+  def next_id(orders):
+    max_id = 0
+    for o in orders:
+      try: max_id = max(max_id, int(o.get('id', 0)))
+      except: pass
+    return max_id + 1
+
+  init_db()
+else:
+  DATA_DIR = os.path.join(ROOT, 'data')
+  ORDERS_FILE = os.path.join(DATA_DIR, 'orders.json')
+  PRODUCTS_FILE = os.path.join(DATA_DIR, 'products.json')
+  os.makedirs(DATA_DIR, exist_ok=True)
+
+  def load_orders():
+    if not os.path.exists(ORDERS_FILE): return []
+    try:
+      with open(ORDERS_FILE, 'r', encoding='utf-8') as f: return json.load(f)
+    except: return []
+
+  def save_orders(orders):
+    with open(ORDERS_FILE, 'w', encoding='utf-8') as f: json.dump(orders, f, ensure_ascii=False, indent=2)
+
+  def load_products():
+    if not os.path.exists(PRODUCTS_FILE): return None
+    try:
+      with open(PRODUCTS_FILE, 'r', encoding='utf-8') as f: return json.load(f)
+    except: return None
+
+  def save_products(products):
+    with open(PRODUCTS_FILE, 'w', encoding='utf-8') as f: json.dump(products, f, ensure_ascii=False, indent=2)
+
+  def next_id(orders):
+    max_id = 0
+    for o in orders:
+      try: max_id = max(max_id, int(o.get('id', 0)))
+      except: pass
+    return max_id + 1
 
 valid_statuses = {'En attente', 'Confirm\u00e9e', 'Exp\u00e9di\u00e9e', 'Livr\u00e9e', 'Annul\u00e9e'}
-
-def next_id(orders):
-  max_id = 0
-  for o in orders:
-    try: max_id = max(max_id, int(o.get('id', 0)))
-    except: pass
-  return max_id + 1
 
 def auth_ok(headers):
   a = headers.get('Authorization', '')
@@ -51,6 +167,70 @@ def auth_ok(headers):
     u, p = raw.split(':', 1)
     return u == ADMIN_USER and p == ADMIN_PASS
   except: return False
+
+def send_order_email(order):
+  if not SMTP_EMAIL or not SMTP_PASSWORD: return
+  try:
+    c = order.get('customer', {})
+    items = order.get('items', [])
+    total = order.get('total', 0)
+    oid = order.get('id', '?')
+    date = datetime.now().strftime('%d/%m/%Y %H:%M')
+
+    items_html = ''.join(f'<tr><td style="padding:8px 12px;border-bottom:1px solid #eee">{i.get("name","")}</td><td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:center">x{i.get("qty","")}</td><td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:right">{i.get("price",0)*i.get("qty",1)} DH</td></tr>' for i in items)
+    total_str = f'{total:,}'.replace(',', ' ') + ' DH'
+
+    shop_html = f'''<html><body style="font-family:Arial,sans-serif;padding:20px">
+<h2 style="color:#3d3530">Nouvelle commande #{oid}</h2>
+<p><strong>Date :</strong> {date}</p>
+<h3>Client</h3>
+<p><strong>Nom :</strong> {c.get("firstName","")} {c.get("lastName","")}<br>
+<strong>T\u00e9l\u00e9phone :</strong> {c.get("phone","")}<br>
+<strong>Email :</strong> {c.get("email","") or "Non renseign\u00e9"}<br>
+<strong>Ville :</strong> {c.get("city","")}<br>
+<strong>Adresse :</strong> {c.get("address","")}<br>
+<strong>Notes :</strong> {c.get("notes","") or "Aucune"}</p>
+<h3>Articles</h3>
+<table style="width:100%;border-collapse:collapse">{items_html}</table>
+<p style="font-size:18px;font-weight:bold;margin-top:16px">Total : {total_str}</p>
+<p style="color:#666">Paiement \u00e0 la livraison (COD)</p>
+</body></html>'''
+
+    client_html = f'''<html><body style="font-family:Arial,sans-serif;padding:20px">
+<h2 style="color:#3d3530">Confirmation de commande #{oid} / \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628 #{oid}</h2>
+<p>Bonjour {c.get("firstName","")} \u0645\u0631\u062d\u0628\u0627\u064b</p>
+<p>Merci pour votre commande sur <strong>LARACH BLOOM</strong>. \u0634\u0643\u0631\u0627\u064b \u0644\u0637\u0644\u0628\u0643 \u0645\u0646 LARACH BLOOM</p>
+<h3>R\u00e9capitulatif / \u0645\u0644\u062e\u0635 \u0627\u0644\u0637\u0644\u0628</h3>
+<table style="width:100%;border-collapse:collapse">{items_html}</table>
+<p style="font-size:18px;font-weight:bold;margin-top:16px">Total / \u0627\u0644\u0645\u062c\u0645\u0648\u0639 : {total_str}</p>
+<p><strong>Ville / \u0627\u0644\u0645\u062f\u064a\u0646\u0629 :</strong> {c.get("city","")}<br>
+<strong>Adresse / \u0627\u0644\u0639\u0646\u0648\u0627\u0646 :</strong> {c.get("address","")}</p>
+<p>Nous vous contacterons par t\u00e9l\u00e9phone pour confirmer la livraison.<br>
+\u0633\u0646\u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0643 \u0647\u0627\u062a\u0641\u064a\u0627\u064b \u0644\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u062a\u0648\u0635\u064a\u0644.</p>
+<p>Cordialement,<br>\u0645\u0639 \u062a\u062d\u064a\u0627\u062a\u060c<br>LARACH BLOOM</p>
+</body></html>'''
+
+    def send(to, subject, html):
+      msg = MIMEMultipart('alternative')
+      msg['From'] = f'LARACH BLOOM <{SMTP_EMAIL}>'
+      msg['To'] = to
+      msg['Subject'] = subject
+      msg.attach(MIMEText(html, 'html', 'utf-8'))
+      try:
+        s = smtplib.SMTP('smtp.gmail.com', 587)
+        s.starttls()
+        s.login(SMTP_EMAIL, SMTP_PASSWORD)
+        s.sendmail(SMTP_EMAIL, [to], msg.as_string())
+        s.quit()
+      except Exception as e:
+        print(f'SMTP error to {to}: {e}')
+
+    threading.Thread(target=send, args=(SMTP_EMAIL, f'Nouvelle commande #{oid}', shop_html)).start()
+    cust_email = c.get('email', '').strip()
+    if cust_email:
+      threading.Thread(target=send, args=(cust_email, f'Confirmation commande #{oid} / \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628 #{oid}', client_html)).start()
+  except Exception as e:
+    print(f'Send email error: {e}')
 
 class Handler(SimpleHTTPRequestHandler):
   def __init__(self, *a, **kw):
@@ -92,6 +272,7 @@ class Handler(SimpleHTTPRequestHandler):
       order = { 'id': oid, 'date': datetime.now(timezone.utc).isoformat(), 'status': 'En attente', 'customer': data.get('customer', {}), 'items': data.get('items', []), 'total': data.get('total', 0), 'payment': data.get('payment', 'COD') }
       orders.append(order)
       save_orders(orders)
+      send_order_email(order)
       self.send_json({ 'success': True, 'id': oid })
     elif self.path == '/api/products':
       if not auth_ok(self.headers): return self.send_err(401, 'Unauthorized')
