@@ -380,13 +380,31 @@ class Handler(SimpleHTTPRequestHandler):
       media_dir = os.path.join(ROOT, 'assets', 'media')
       os.makedirs(media_dir, exist_ok=True)
       filepath = os.path.join(media_dir, filename)
+      chunks = []
       with open(filepath, 'wb') as f:
           remaining = length
           while remaining > 0:
               chunk = self.rfile.read(min(65536, remaining))
               if not chunk: break
               f.write(chunk)
+              chunks.append(chunk)
               remaining -= len(chunk)
+      # Also store in DB if available
+      data = b''.join(chunks) if len(chunks) > 1 else (chunks[0] if chunks else b'')
+      if data and use_db:
+          try:
+              key = filename.rsplit('.', 1)[0] if '.' in filename else filename
+              mime = self.guess_mime(filename)
+              conn = get_db()
+              cur = conn.cursor()
+              cur.execute('INSERT INTO media (key, data, mime) VALUES (%s, %s, %s) ON CONFLICT (key) DO UPDATE SET data = EXCLUDED.data, mime = EXCLUDED.mime',
+                          (key, psycopg2.Binary(data), mime))
+              conn.commit()
+              cur.close()
+              conn.close()
+              print(f'[LARACH] Stored {key} in DB ({len(data)} bytes)')
+          except Exception as e:
+              print(f'[LARACH] DB storage error: {e}')
       self.send_json({ 'success': True })
     else:
       self.send_err(404, 'Not found')
@@ -432,6 +450,16 @@ class Handler(SimpleHTTPRequestHandler):
     self.send_header('Access-Control-Allow-Origin', '*')
     self.end_headers()
     self.wfile.write(json.dumps(data).encode())
+
+  def guess_mime(self, filename):
+    ext = filename.rsplit('.', 1)[-1].lower() if '.' in filename else ''
+    return {
+      'mp4': 'video/mp4', 'mov': 'video/quicktime',
+      'jpg': 'image/jpeg', 'jpeg': 'image/jpeg',
+      'png': 'image/png', 'gif': 'image/gif', 'webp': 'image/webp',
+      'mp3': 'audio/mpeg', 'wav': 'audio/wav',
+      'pdf': 'application/pdf',
+    }.get(ext, 'application/octet-stream')
 
   def serve_media(self, key):
     try:
