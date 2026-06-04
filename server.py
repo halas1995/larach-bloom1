@@ -319,6 +319,11 @@ class Handler(SimpleHTTPRequestHandler):
     elif re.match(r'^/api/media/.+$', parsed.path):
       key = parsed.path.split('/')[-1]
       self.serve_media(key)
+    elif parsed.path == '/api/debug':
+      self.send_json({
+        'use_db': use_db,
+        'database_url_set': bool(os.environ.get('DATABASE_URL', '')),
+      })
     else:
       super().do_GET()
 
@@ -445,9 +450,36 @@ class Handler(SimpleHTTPRequestHandler):
       self.send_header('Cache-Control', 'public, max-age=31536000')
       self.end_headers()
       self.wfile.write(data)
+    except NameError:
+      self.serve_static(key)
     except Exception as e:
       print(f'[LARACH] serve_media error: {e}')
-      self.send_err(500, str(e))
+      try:
+        self.serve_static(key)
+      except:
+        self.send_err(500, str(e))
+
+  def serve_static(self, key):
+    media_dir = os.path.join(ROOT, 'assets', 'media')
+    # Map key to known files
+    file_map = {'video-off': 'video-off.mp4', 'background': 'background.jpg'}
+    filename = file_map.get(key)
+    if not filename:
+      return self.send_err(404, 'Unknown media key')
+    filepath = os.path.join(media_dir, filename)
+    if not os.path.exists(filepath):
+      return self.send_err(404, 'File not found')
+    mime_map = {'mp4': 'video/mp4', 'jpg': 'image/jpeg', 'png': 'image/png'}
+    ext = filename.rsplit('.', 1)[-1]
+    mime = mime_map.get(ext, 'application/octet-stream')
+    with open(filepath, 'rb') as f:
+      data = f.read()
+    self.send_response(200)
+    self.send_header('Content-Type', mime)
+    self.send_header('Content-Length', str(len(data)))
+    self.send_header('Cache-Control', 'public, max-age=31536000')
+    self.end_headers()
+    self.wfile.write(data)
 
   def send_err(self, code, msg):
     self.send_response(code)
