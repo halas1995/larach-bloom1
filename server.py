@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, sys, json, base64, hashlib, hmac, time, re, smtplib, threading
+import os, sys, json, base64, hashlib, hmac, time, re, smtplib, threading, urllib.request
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime, timezone
 from urllib.parse import urlparse, parse_qs
@@ -40,6 +40,13 @@ if use_db:
           image TEXT DEFAULT '',
           desc_text TEXT DEFAULT '',
           cat TEXT DEFAULT ''
+        )
+      ''')
+      cur.execute('''
+        CREATE TABLE IF NOT EXISTS media (
+          key TEXT PRIMARY KEY,
+          data BYTEA NOT NULL,
+          mime TEXT NOT NULL DEFAULT 'application/octet-stream'
         )
       ''')
       cur.execute('''
@@ -138,6 +145,43 @@ if use_db:
   print(f'[LARACH] Calling init_db()...')
   init_db()
   print(f'[LARACH] init_db() done')
+
+  def seed_media(key, filepath, mime, fallback_url=None):
+    try:
+      conn = get_db()
+      cur = conn.cursor()
+      cur.execute('SELECT 1 FROM media WHERE key = %s', (key,))
+      if cur.fetchone():
+        print(f'[LARACH] Media {key} already in DB')
+        cur.close()
+        conn.close()
+        return
+      data = None
+      if os.path.exists(filepath):
+        with open(filepath, 'rb') as f:
+          data = f.read()
+        print(f'[LARACH] Read {key} from disk ({len(data)} bytes)')
+      elif fallback_url:
+        print(f'[LARACH] Downloading {key} from {fallback_url}...')
+        req = urllib.request.Request(fallback_url)
+        resp = urllib.request.urlopen(req, timeout=120)
+        data = resp.read()
+        print(f'[LARACH] Downloaded {key} ({len(data)} bytes)')
+      if data:
+        cur.execute('INSERT INTO media (key, data, mime) VALUES (%s, %s, %s)',
+                    (key, psycopg2.Binary(data), mime))
+        conn.commit()
+        print(f'[LARACH] Seeded media {key} into DB')
+      else:
+        print(f'[LARACH] Could not find or download {key}')
+      cur.close()
+      conn.close()
+    except Exception as e:
+      print(f'[LARACH] seed_media error: {e}')
+
+  video_path = os.path.join(ROOT, 'assets', 'media', 'video-off.mp4')
+  seed_media('video-off', video_path, 'video/mp4',
+             fallback_url='https://larach-bloom.com/assets/media/video-off.mp4')
 else:
   print(f'[LARACH] Using JSON file storage')
   DATA_DIR = os.path.join(ROOT, 'data')
@@ -271,6 +315,9 @@ class Handler(SimpleHTTPRequestHandler):
       o = next((x for x in orders if str(x.get('id')) == oid), None)
       if not o: return self.send_err(404, 'Not found')
       self.send_json(o)
+    elif re.match(r'^/api/media/.+$', parsed.path):
+      key = parsed.path.split('/')[-1]
+      self.serve_media(key)
     else:
       super().do_GET()
 
@@ -379,6 +426,27 @@ class Handler(SimpleHTTPRequestHandler):
     self.send_header('Access-Control-Allow-Origin', '*')
     self.end_headers()
     self.wfile.write(json.dumps(data).encode())
+
+  def serve_media(self, key):
+    try:
+      conn = get_db()
+      cur = conn.cursor()
+      cur.execute('SELECT data, mime FROM media WHERE key = %s', (key,))
+      row = cur.fetchone()
+      cur.close()
+      conn.close()
+      if not row:
+        return self.send_err(404, 'Media not found')
+      data, mime = row
+      self.send_response(200)
+      self.send_header('Content-Type', mime)
+      self.send_header('Content-Length', str(len(data)))
+      self.send_header('Cache-Control', 'public, max-age=31536000')
+      self.end_headers()
+      self.wfile.write(data)
+    except Exception as e:
+      print(f'[LARACH] serve_media error: {e}')
+      self.send_err(500, str(e))
 
   def send_err(self, code, msg):
     self.send_response(code)
