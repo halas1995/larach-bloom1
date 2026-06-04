@@ -336,7 +336,7 @@ function getProductImage(p) {
     var stored = localStorage.getItem('lb_img_' + p.id);
     if (stored) return stored;
   } catch(e) {}
-  return p.image && p.image.startsWith('assets/') ? p.image : '';
+  return p.image || '';
 }
 
 function cartItemImg(id) {
@@ -345,7 +345,7 @@ function cartItemImg(id) {
     if (stored) return stored;
   } catch(e) {}
   var p = products.find(function(x) { return x.id === id; });
-  return p && p.image && p.image.startsWith('assets/') ? p.image : '';
+  return p && p.image ? p.image : '';
 }
 
 function compressFile(file, maxW, quality, cb) {
@@ -368,20 +368,6 @@ function compressFile(file, maxW, quality, cb) {
 
 function saveProductImage(id, dataUrl) {
   try { localStorage.setItem('lb_img_' + id, dataUrl); } catch(e) {}
-}
-
-function uploadImage(id, dataUrl, cb) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', API_BASE + '/api/upload-image/' + id, true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.setRequestHeader('Authorization', 'Basic ' + btoa(ADMIN_CREDENTIALS.username + ':' + ADMIN_CREDENTIALS.password));
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      try { var r = JSON.parse(xhr.responseText); if (r.success && cb) cb(r.path); } catch(e) { if (cb) cb(null); }
-    } else { if (cb) cb(null); }
-  };
-  xhr.onerror = function() { if (cb) cb(null); };
-  xhr.send(JSON.stringify({ image: dataUrl }));
 }
 
 function renderProducts() {
@@ -748,13 +734,9 @@ function addProduct() {
     compressFile(file, 800, 0.7, function(data) {
       if (!data) { cb(); return; }
       saveProductImage(pid, data);
-      uploadImage(pid, data, function(path) {
-        if (path) {
-          var found = products.find(function(x) { return x.id === pid; });
-          if (found) found.image = path;
-        }
-        cb();
-      });
+      var found = products.find(function(x) { return x.id === pid; });
+      if (found) found.image = data;
+      cb();
     });
   }
 
