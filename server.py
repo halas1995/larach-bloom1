@@ -18,11 +18,13 @@ ADMIN_USER = 'admin'
 ADMIN_PASS = 'larachbloom'
 
 use_db = bool(DATABASE_URL)
+print(f'[LARACH] DATABASE_URL set: {bool(DATABASE_URL)}, using_db: {use_db}')
 if use_db:
   import psycopg2
   import psycopg2.extras
 
   def get_db():
+    print(f'[LARACH] Connecting to DB...')
     return psycopg2.connect(DATABASE_URL, sslmode='require')
 
   def init_db():
@@ -52,10 +54,11 @@ if use_db:
         )
       ''')
       conn.commit()
+      print(f'[LARACH] DB tables created/verified')
       cur.close()
       conn.close()
     except Exception as e:
-      print(f'DB init error: {e}')
+      print(f'[LARACH] DB init error: {e}')
 
   def load_products():
     try:
@@ -65,8 +68,11 @@ if use_db:
       rows = cur.fetchall()
       cur.close()
       conn.close()
-      return [dict(r) for r in rows]
-    except:
+      prods = [dict(r) for r in rows]
+      print(f'[LARACH] load_products returned {len(prods)} products from DB')
+      return prods
+    except Exception as e:
+      print(f'[LARACH] load_products error: {e}')
       return None
 
   def save_products(prods):
@@ -78,10 +84,11 @@ if use_db:
         cur.execute('INSERT INTO products (id, name, price, qty, image, desc_text, cat) VALUES (%s,%s,%s,%s,%s,%s,%s)',
           (p.get('id'), p.get('name',''), p.get('price',0), p.get('qty',0), p.get('image',''), p.get('desc',''), p.get('cat','')))
       conn.commit()
+      print(f'[LARACH] save_products saved {len(prods)} products to DB')
       cur.close()
       conn.close()
     except Exception as e:
-      print(f'save_products error: {e}')
+      print(f'[LARACH] save_products error: {e}')
 
   def load_orders():
     try:
@@ -100,8 +107,10 @@ if use_db:
         d['id'] = int(d['id'])
         d['total'] = float(d['total'])
         result.append(d)
+      print(f'[LARACH] load_orders returned {len(result)} orders from DB')
       return result
-    except:
+    except Exception as e:
+      print(f'[LARACH] load_orders error: {e}')
       return []
 
   def save_orders(orders):
@@ -113,10 +122,11 @@ if use_db:
         cur.execute('INSERT INTO orders (id, date_text, status, customer_json, items_json, total, payment) VALUES (%s,%s,%s,%s,%s,%s,%s)',
           (o.get('id'), o.get('date',''), o.get('status','En attente'), json.dumps(o.get('customer',{})), json.dumps(o.get('items',[])), o.get('total',0), o.get('payment','COD')))
       conn.commit()
+      print(f'[LARACH] save_orders saved {len(orders)} orders to DB')
       cur.close()
       conn.close()
     except Exception as e:
-      print(f'save_orders error: {e}')
+      print(f'[LARACH] save_orders error: {e}')
 
   def next_id(orders):
     max_id = 0
@@ -125,8 +135,11 @@ if use_db:
       except: pass
     return max_id + 1
 
+  print(f'[LARACH] Calling init_db()...')
   init_db()
+  print(f'[LARACH] init_db() done')
 else:
+  print(f'[LARACH] Using JSON file storage')
   DATA_DIR = os.path.join(ROOT, 'data')
   ORDERS_FILE = os.path.join(DATA_DIR, 'orders.json')
   PRODUCTS_FILE = os.path.join(DATA_DIR, 'products.json')
