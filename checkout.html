@@ -41,7 +41,7 @@
       <div class="checkout-layout">
         <div class="checkout-form">
           <h2 data-i18n="checkoutFormTitle">Informations de livraison</h2>
-          <form id="checkoutForm" novalidate>
+          <form id="checkoutForm">
             <div class="field">
               <label for="firstName" data-i18n="checkoutFirstName">Pr\u00e9nom</label>
               <input type="text" id="firstName" name="firstName" data-i18n-placeholder="checkoutFirstNamePH" placeholder="Votre pr\u00e9nom" required>
@@ -55,8 +55,8 @@
               <input type="tel" id="phone" name="phone" data-i18n-placeholder="checkoutPhonePH" placeholder="06 XX XX XX XX" required>
             </div>
             <div class="field">
-              <label for="email" data-i18n="checkoutEmail">Email (optionnel)</label>
-              <input type="email" id="email" name="email" data-i18n-placeholder="checkoutEmailPH" placeholder="votre@email.com">
+              <label for="email" data-i18n="checkoutEmail">Email</label>
+              <input type="email" id="email" name="email" data-i18n-placeholder="checkoutEmailPH" placeholder="votre@email.com" required>
             </div>
             <div class="field">
               <label for="address" data-i18n="checkoutAddress">Adresse compl\u00e8te</label>
@@ -69,8 +69,8 @@
               </select>
             </div>
             <div class="field">
-              <label for="notes" data-i18n="checkoutNotes">Notes (optionnel)</label>
-              <textarea id="notes" name="notes" rows="2" data-i18n-placeholder="checkoutNotesPH" placeholder="Instructions de livraison..."></textarea>
+              <label for="notes" data-i18n="checkoutNotes">Notes</label>
+              <textarea id="notes" name="notes" rows="2" data-i18n-placeholder="checkoutNotesPH" placeholder="Instructions de livraison..." required></textarea>
             </div>
 
             <div class="payment-box">
