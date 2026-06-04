@@ -243,14 +243,14 @@ def send_order_email(order):
 <h3>Client</h3>
 <p><strong>Nom :</strong> {c.get("firstName","")} {c.get("lastName","")}<br>
 <strong>T\u00e9l\u00e9phone :</strong> {c.get("phone","")}<br>
-<strong>Email :</strong> {c.get("email","") or "Non renseign\u00e9"}<br>
+<strong>Email :</strong> {c.get("email","") or "Non renseigné"}<br>
 <strong>Ville :</strong> {c.get("city","")}<br>
 <strong>Adresse :</strong> {c.get("address","")}<br>
 <strong>Notes :</strong> {c.get("notes","") or "Aucune"}</p>
 <h3>Articles</h3>
 <table style="width:100%;border-collapse:collapse">{items_html}</table>
 <p style="font-size:18px;font-weight:bold;margin-top:16px">Total : {total_str}</p>
-<p style="color:#666">Paiement \u00e0 la livraison (COD)</p>
+<p style="color:#666">Paiement à la livraison (COD)</p>
 </body></html>'''
 
     client_html = f'''<html><body style="font-family:Arial,sans-serif;padding:20px">
