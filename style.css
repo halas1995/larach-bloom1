@@ -1337,9 +1337,451 @@ section {
   gap: 16px;
 }
 
+/* ========== HOMEPAGE LUXURY SECTIONS ========== */
+
+.hp-best-sellers {
+  text-align: center;
+}
+
+.hp-best-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 48px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hp-best-card {
+  text-align: center;
+}
+
+.hp-best-img {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.hp-best-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.hp-best-card:hover .hp-best-img img {
+  transform: scale(1.04);
+}
+
+.hp-best-cat {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #c4b59a;
+  margin-bottom: 8px;
+}
+
+.hp-best-info h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #3d3530;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.hp-best-price {
+  display: block;
+  font-size: 14px;
+  color: #9a9088;
+  margin-bottom: 20px;
+}
+
+.hp-best-link {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #3d3530;
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #c4b59a;
+  transition: all 0.3s;
+}
+
+.hp-best-link:hover {
+  border-bottom-color: #3d3530;
+}
+
+/* Philosophy */
+.hp-philosophy {
+  padding: 0;
+  background: #fff;
+}
+
+.hp-philo-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 520px;
+}
+
+.hp-philo-text {
+  padding: 100px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hp-philo-text h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: #3d3530;
+  line-height: 1.3;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.hp-philo-text p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #8a8078;
+  max-width: 420px;
+}
+
+.hp-philo-visual {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(196, 181, 154, 0.15) 0%, transparent 100%),
+    linear-gradient(135deg, #f0ebe5 0%, #f8f5f0 50%, #ede8e2 100%);
+  min-height: 400px;
+}
+
+/* Home Products Grid */
+.hp-products-alt {
+  background: #fff;
+}
+
+.hp-products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.hp-product-card {
+  text-align: center;
+}
+
+.hp-product-img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.hp-product-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.hp-product-card:hover .hp-product-img img {
+  transform: scale(1.04);
+}
+
+.hp-product-info h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #3d3530;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+.hp-product-price {
+  display: block;
+  font-size: 13px;
+  color: #9a9088;
+  margin-bottom: 16px;
+}
+
+.hp-product-add {
+  padding: 10px 32px;
+  background: transparent;
+  color: #3d3530;
+  border: 1px solid #c4b59a;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Playfair Display', serif;
+}
+
+.hp-product-add:hover {
+  background: #3d3530;
+  color: #fff;
+  border-color: #3d3530;
+}
+
+/* Reviews */
+.hp-reviews {
+  text-align: center;
+}
+
+.hp-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.hp-review-card {
+  text-align: center;
+  padding: 32px 20px;
+  background: #fff;
+}
+
+.hp-review-stars {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin-bottom: 16px;
+}
+
+.hp-review-card p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.hp-review-author {
+  font-size: 11px;
+  color: #c4b59a;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hp-review-toggle {
+  display: inline-block;
+  padding: 12px 36px;
+  background: transparent;
+  color: #3d3530;
+  border: 1px solid #c4b59a;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Playfair Display', serif;
+}
+
+.hp-review-toggle:hover {
+  background: #3d3530;
+  color: #fff;
+  border-color: #3d3530;
+}
+
+.hp-review-form {
+  max-width: 500px;
+  margin: 24px auto 0;
+  padding: 32px;
+  background: #fff;
+  display: none;
+  text-align: left;
+}
+
+.hp-review-form.active {
+  display: block;
+}
+
+.hp-review-form h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #3d3530;
+  margin-bottom: 20px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.hp-review-field {
+  margin-bottom: 16px;
+}
+
+.hp-review-field label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #8a8078;
+  margin-bottom: 6px;
+}
+
+.hp-review-field input,
+.hp-review-field textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e0d8d0;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  background: #f8f5f0;
+  color: #3d3530;
+}
+
+.hp-review-field input:focus,
+.hp-review-field textarea:focus {
+  border-color: #c4a97d;
+}
+
+.hp-star-select {
+  display: flex;
+  gap: 6px;
+  font-size: 28px;
+  color: #e5ddd5;
+  cursor: pointer;
+}
+
+.hp-star-select span {
+  transition: color 0.2s;
+}
+
+.hp-star-select span.active,
+.hp-star-select span:hover {
+  color: #c4b59a;
+}
+
+.hp-review-submit {
+  width: 100%;
+  padding: 12px;
+  background: #3d3530;
+  color: #fff;
+  border: none;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'Playfair Display', serif;
+}
+
+.hp-review-submit:hover {
+  background: #5a5048;
+}
+
+.hp-review-msg {
+  font-size: 12px;
+  color: #8a8078;
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* Ingredients */
+.hp-ingredients {
+  text-align: center;
+}
+
+.hp-ingr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  margin-top: 48px;
+}
+
+.hp-ingr-card {
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.hp-ingr-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #f0ebe5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c4b59a;
+}
+
+.hp-ingr-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #3d3530;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.hp-ingr-card p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #8a8078;
+}
+
+/* Final CTA */
+.hp-cta {
+  text-align: center;
+  position: relative;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 60%, rgba(196, 181, 154, 0.12) 0%, transparent 100%),
+    linear-gradient(160deg, #f0ebe5 0%, #f8f5f0 40%, #ede8e2 100%);
+}
+
+.hp-cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.hp-cta-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: #3d3530;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+
+.hp-cta-content p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #8a8078;
+  margin-bottom: 36px;
+}
+
 @media (max-width: 1024px) {
   .checkout-layout {
     grid-template-columns: 1fr;
+  }
+
+  .hp-products-grid,
+  .hp-ingr-grid,
+  .hp-reviews-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hp-best-grid {
+    gap: 32px;
+  }
+
+  .hp-philo-text {
+    padding: 60px 40px;
+  }
+
+  .hp-ingr-card,
+  .hp-review-card {
+    padding: 24px 16px;
   }
 }
 
@@ -1387,6 +1829,39 @@ section {
   .essence-section {
     height: 50vh;
     min-height: 300px;
+  }
+
+  .hp-best-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+
+  .hp-products-grid,
+  .hp-ingr-grid,
+  .hp-reviews-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .hp-philo-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hp-philo-text {
+    padding: 60px 32px;
+    text-align: center;
+  }
+
+  .hp-philo-text p {
+    max-width: 100%;
+  }
+
+  .hp-philo-visual {
+    min-height: 240px;
+  }
+
+  .hp-cta-content h2 {
+    font-size: 26px;
   }
 
   .admin-side {
@@ -1562,6 +2037,19 @@ section {
 
   .produits-grid {
     gap: 20px;
+  }
+
+  .hp-best-info h3 {
+    font-size: 18px;
+  }
+
+  .hp-philo-text h2 {
+    font-size: 22px;
+  }
+
+  .hp-ingr-card p,
+  .hp-review-card p {
+    font-size: 13px;
   }
 
   .footer-inner {

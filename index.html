@@ -55,6 +55,105 @@
       <p data-i18n="essenceText">Chez Larach Bloom, chaque soin est inspir\u00e9 de la nature marocaine et con\u00e7u pour r\u00e9v\u00e9ler l'\u00e9clat naturel de votre peau. Des ingr\u00e9dients purs, un savoir-faire authentique, pour une beaut\u00e9 qui vous ressemble.</p>
     </div>
   </section>
+
+  <section class="hp-best-sellers">
+    <div class="container">
+      <span class="section-label">Les Incontournables</span>
+      <h2 class="section-title">Nos Best-Sellers</h2>
+      <div class="hp-best-grid" id="bestSellersGrid"></div>
+    </div>
+  </section>
+
+  <section class="hp-philosophy">
+    <div class="hp-philo-inner">
+      <div class="hp-philo-text">
+        <span class="section-label">Notre Philosophie</span>
+        <h2>La beaut&eacute; dans sa forme la plus pure</h2>
+        <p>Chaque soin Larach Bloom est le fruit d&rsquo;un h&eacute;ritage ancestral marocain et d&rsquo;une science cosm&eacute;tique exigeante. Nous s&eacute;lectionnons les plus purs ingr&eacute;dients naturels pour cr&eacute;er des textures d&rsquo;exception qui transforment votre rituel beaut&eacute; en un moment de pure &eacute;l&eacute;gance.</p>
+      </div>
+      <div class="hp-philo-visual"></div>
+    </div>
+  </section>
+
+  <section class="hp-products hp-products-alt">
+    <div class="container">
+      <span class="section-label">La Collection</span>
+      <h2 class="section-title">Tous nos soins</h2>
+      <div class="hp-products-grid" id="homeProductsGrid"></div>
+    </div>
+  </section>
+
+  <section class="hp-reviews" id="reviews">
+    <div class="container">
+      <span class="section-label">T&eacute;moignages</span>
+      <h2 class="section-title">Ce que nos clientes disent</h2>
+      <div class="hp-reviews-grid" id="reviewsGrid"></div>
+      <button class="hp-review-toggle" id="reviewToggle" onclick="document.getElementById('reviewForm').classList.toggle('active')">Laisser un avis</button>
+      <div class="hp-review-form" id="reviewForm">
+        <h3>Partagez votre exp&eacute;rience</h3>
+        <div class="hp-review-field">
+          <label>Nom (optionnel)</label>
+          <input type="text" id="revName" placeholder="Votre nom">
+        </div>
+        <div class="hp-review-field">
+          <label>Note</label>
+          <div class="hp-star-select" id="starSelect">
+            <span data-star="1">&#9733;</span>
+            <span data-star="2">&#9733;</span>
+            <span data-star="3">&#9733;</span>
+            <span data-star="4">&#9733;</span>
+            <span data-star="5">&#9733;</span>
+          </div>
+        </div>
+        <div class="hp-review-field">
+          <label>Votre avis</label>
+          <textarea id="revText" rows="4" placeholder="Partagez votre exp&eacute;rience avec nos produits..."></textarea>
+        </div>
+        <button class="hp-review-submit" onclick="submitReview()">Envoyer</button>
+        <p class="hp-review-msg" id="reviewMsg"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="hp-ingredients">
+    <div class="container">
+      <span class="section-label light">L&rsquo;Essence</span>
+      <h2 class="section-title">Des ingr&eacute;dients d&rsquo;exception</h2>
+      <div class="hp-ingr-grid">
+        <div class="hp-ingr-card">
+          <div class="hp-ingr-icon">
+            <svg viewBox="0 0 40 40" width="32" height="32"><path fill="currentColor" d="M20 2C10.06 2 2 10.06 2 20s8.06 18 18 18 18-8.06 18-18S29.94 2 20 2zm0 32c-7.73 0-14-6.27-14-14S12.27 6 20 6s14 6.27 14 14-6.27 14-14 14z"/><circle fill="currentColor" cx="20" cy="14" r="2"/><circle fill="currentColor" cx="14" cy="20" r="2"/><circle fill="currentColor" cx="26" cy="20" r="2"/></svg>
+          </div>
+          <h3>Huile d&rsquo;Argan</h3>
+          <p>L&rsquo;or liquide du Maroc, r&eacute;colt&eacute; dans la r&eacute;gion d&rsquo;Essaouira. Riche en vitamine E et en acides gras essentiels.</p>
+        </div>
+        <div class="hp-ingr-card">
+          <div class="hp-ingr-icon">
+            <svg viewBox="0 0 40 40" width="32" height="32"><path fill="currentColor" d="M20 2C10.06 2 2 10.06 2 20s8.06 18 18 18 18-8.06 18-18S29.94 2 20 2zm0 32c-7.73 0-14-6.27-14-14S12.27 6 20 6s14 6.27 14 14-6.27 14-14 14z"/><path fill="currentColor" d="M20 10c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+          </div>
+          <h3>Rose de Damas</h3>
+          <p>Distill&eacute;e avec soin dans la vall&eacute;e du Dad&egrave;s, ses propri&eacute;t&eacute;s apaisantes subliment les peaux les plus exigeantes.</p>
+        </div>
+        <div class="hp-ingr-card">
+          <div class="hp-ingr-icon">
+            <svg viewBox="0 0 40 40" width="32" height="32"><path fill="currentColor" d="M20 2C10.06 2 2 10.06 2 20s8.06 18 18 18 18-8.06 18-18S29.94 2 20 2zm0 32c-7.73 0-14-6.27-14-14S12.27 6 20 6s14 6.27 14 14-6.27 14-14 14z"/><path fill="currentColor" d="M20 8c-6.63 0-12 5.37-12 12s5.37 12 12 12 12-5.37 12-12-5.37-12-12-12zm-2 16h-2v-2h2v2zm0-4h-2v-6h2v6z"/></svg>
+          </div>
+          <h3>Miel de Montagne</h3>
+          <p>R&eacute;colt&eacute; dans le Haut Atlas, ce miel rare est un concentr&eacute; de bienfaits nourrissants et protecteurs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hp-cta">
+    <div class="hp-cta-content">
+      <span class="section-label light">L&rsquo;appel de la beaut&eacute;</span>
+      <h2>Commencez votre rituel</h2>
+      <p>D&eacute;couvrez une beaut&eacute; qui vous ressemble, inspir&eacute;e par la g&eacute;n&eacute;rosit&eacute; de la nature marocaine.</p>
+      <a href="products.html" class="hero-btn">Explorer la collection</a>
+    </div>
+  </section>
+
 </main>
 
 <footer class="footer">
@@ -105,5 +204,159 @@
 </div>
 
 <script src="script.js"></script>
+<script>
+(function() {
+  var API_BASE = window.location.origin;
+
+  function loadReviews() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', API_BASE + '/api/reviews', true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        try {
+          var resp = JSON.parse(xhr.responseText);
+          if (resp.reviews && resp.reviews.length) renderReviews(resp.reviews);
+        } catch(e) {}
+      }
+    };
+    xhr.send();
+  }
+
+  function renderReviews(list) {
+    var grid = document.getElementById('reviewsGrid');
+    if (!grid) return;
+    for (var i = 0; i < list.length; i++) {
+      var r = list[i];
+      var div = document.createElement('div');
+      div.className = 'hp-review-card';
+      var stars = '';
+      for (var s = 0; s < 5; s++) {
+        stars += '<svg width="12" height="12" viewBox="0 0 24 24"><path fill="' + (s < r.rating ? '#c4b59a' : '#e5ddd5') + '" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+      }
+      var name = r.name || 'Anonyme';
+      var prod = r.product_name ? ' sur ' + r.product_name : '';
+      div.innerHTML =
+        '<div class="hp-review-stars">' + stars + '</div>' +
+        '<p>"' + r.text + '"</p>' +
+        '<span class="hp-review-author">&mdash; ' + name + prod + '</span>';
+      grid.appendChild(div);
+    }
+  }
+
+  function submitReview() {
+    var name = document.getElementById('revName').value.trim();
+    var text = document.getElementById('revText').value.trim();
+    if (!text) { document.getElementById('reviewMsg').textContent = 'Veuillez écrire un avis.'; return; }
+    var stars = document.querySelectorAll('#starSelect span');
+    var rating = 5;
+    for (var i = 0; i < stars.length; i++) {
+      if (stars[i].classList.contains('active')) rating = i + 1;
+    }
+    document.getElementById('reviewMsg').textContent = 'Envoi en cours...';
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', API_BASE + '/api/reviews', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        document.getElementById('reviewMsg').textContent = 'Merci pour votre avis !';
+        document.getElementById('revName').value = '';
+        document.getElementById('revText').value = '';
+        document.getElementById('reviewForm').classList.remove('active');
+        setTimeout(function() {
+          document.getElementById('reviewMsg').textContent = '';
+          var grid = document.getElementById('reviewsGrid');
+          if (grid) grid.innerHTML = '';
+          loadReviews();
+        }, 1500);
+      } else {
+        document.getElementById('reviewMsg').textContent = 'Erreur lors de l\'envoi.';
+      }
+    };
+    xhr.send(JSON.stringify({ name: name, rating: rating, text: text }));
+  }
+  window.submitReview = submitReview;
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', API_BASE + '/api/products', true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try {
+        var resp = JSON.parse(xhr.responseText);
+        var products = resp.products || [];
+        if (products.length) renderHomeProducts(products);
+      } catch(e) {}
+    }
+  };
+  xhr.send();
+
+  function renderHomeProducts(all) {
+    var bestGrid = document.getElementById('bestSellersGrid');
+    if (bestGrid) {
+      var alba = null;
+      var other = null;
+      for (var i = 0; i < all.length; i++) {
+        var p = all[i];
+        if (p.name && p.name.toLowerCase().indexOf('alba') !== -1) {
+          if (!alba) alba = p;
+        } else {
+          if (!other) other = p;
+        }
+      }
+      var best = [];
+      if (alba) best.push(alba);
+      if (other) best.push(other);
+      if (best.length === 0) best = all.slice(0, 2);
+      for (var j = 0; j < best.length; j++) {
+        var p = best[j];
+        var div = document.createElement('div');
+        div.className = 'hp-best-card';
+        div.innerHTML =
+          '<div class="hp-best-img"><img src="' + (p.image || '') + '" alt="' + p.name + '" loading="lazy"></div>' +
+          '<div class="hp-best-info">' +
+            '<span class="hp-best-cat">' + (p.cat || '') + '</span>' +
+            '<h3>' + p.name + '</h3>' +
+            '<span class="hp-best-price">' + (p.price || 0) + ' DH</span>' +
+            '<a href="product-detail.html?id=' + p.id + '" class="hp-best-link">D&eacute;couvrir</a>' +
+          '</div>';
+        bestGrid.appendChild(div);
+      }
+    }
+
+    var homeGrid = document.getElementById('homeProductsGrid');
+    if (homeGrid) {
+      for (var k = 0; k < all.length; k++) {
+        var pr = all[k];
+        var cd = document.createElement('div');
+        cd.className = 'hp-product-card';
+        cd.innerHTML =
+          '<div class="hp-product-img" onclick="window.location.href=\'product-detail.html?id=' + pr.id + '\'">' +
+            '<img src="' + (pr.image || '') + '" alt="' + pr.name + '" loading="lazy">' +
+          '</div>' +
+          '<div class="hp-product-info">' +
+            '<h3>' + pr.name + '</h3>' +
+            '<span class="hp-product-price">' + (pr.price || 0) + ' DH</span>' +
+            '<button class="hp-product-add" onclick="add(' + pr.id + ')">' + (typeof t === 'function' ? t('addToCart') : 'Ajouter') + '</button>' +
+          '</div>';
+        homeGrid.appendChild(cd);
+      }
+    }
+  }
+
+  loadReviews();
+})();
+
+(function() {
+  var stars = document.querySelectorAll('#starSelect span');
+  for (var i = 0; i < stars.length; i++) {
+    (function(idx) {
+      stars[idx].onclick = function() {
+        for (var j = 0; j < stars.length; j++) {
+          stars[j].classList.toggle('active', j <= idx);
+        }
+      };
+    })(i);
+  }
+})();
+</script>
 </body>
 </html>

@@ -5,3 +5,4 @@ __pycache__/
 assets/media/*.mp4
 assets/media/*.mov
 assets/media/*.avi
+data/

@@ -60,6 +60,16 @@ if use_db:
           payment TEXT DEFAULT 'COD'
         )
       ''')
+      cur.execute('''
+        CREATE TABLE IF NOT EXISTS reviews (
+          id SERIAL PRIMARY KEY,
+          name TEXT NOT NULL DEFAULT '',
+          rating INTEGER DEFAULT 5,
+          text TEXT NOT NULL DEFAULT '',
+          date_text TEXT NOT NULL DEFAULT '',
+          product_name TEXT DEFAULT ''
+        )
+      ''')
       conn.commit()
       print(f'[LARACH] DB tables created/verified')
       cur.close()
@@ -135,6 +145,33 @@ if use_db:
     except Exception as e:
       print(f'[LARACH] save_orders error: {e}')
 
+  def load_reviews():
+    try:
+      conn = get_db()
+      cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+      cur.execute('SELECT id, name, rating, text, date_text, product_name FROM reviews ORDER BY id DESC')
+      rows = cur.fetchall()
+      cur.close()
+      conn.close()
+      return [dict(r) for r in rows]
+    except Exception as e:
+      print(f'[LARACH] load_reviews error: {e}')
+      return []
+
+  def save_reviews(reviews):
+    try:
+      conn = get_db()
+      cur = conn.cursor()
+      cur.execute('DELETE FROM reviews')
+      for r in reviews:
+        cur.execute('INSERT INTO reviews (id, name, rating, text, date_text, product_name) VALUES (%s,%s,%s,%s,%s,%s)',
+          (r.get('id'), r.get('name',''), r.get('rating',5), r.get('text',''), r.get('date',''), r.get('product_name','')))
+      conn.commit()
+      cur.close()
+      conn.close()
+    except Exception as e:
+      print(f'[LARACH] save_reviews error: {e}')
+
   def next_id(orders):
     max_id = 0
     for o in orders:
@@ -188,6 +225,7 @@ else:
   DATA_DIR = os.path.join(ROOT, 'data')
   ORDERS_FILE = os.path.join(DATA_DIR, 'orders.json')
   PRODUCTS_FILE = os.path.join(DATA_DIR, 'products.json')
+  REVIEWS_FILE = os.path.join(DATA_DIR, 'reviews.json')
   os.makedirs(DATA_DIR, exist_ok=True)
 
   def load_orders():
@@ -208,12 +246,28 @@ else:
   def save_products(products):
     with open(PRODUCTS_FILE, 'w', encoding='utf-8') as f: json.dump(products, f, ensure_ascii=False, indent=2)
 
+  def load_reviews():
+    if not os.path.exists(REVIEWS_FILE): return []
+    try:
+      with open(REVIEWS_FILE, 'r', encoding='utf-8') as f: return json.load(f)
+    except: return []
+
+  def save_reviews(reviews):
+    with open(REVIEWS_FILE, 'w', encoding='utf-8') as f: json.dump(reviews, f, ensure_ascii=False, indent=2)
+
   def next_id(orders):
     max_id = 0
     for o in orders:
       try: max_id = max(max_id, int(o.get('id', 0)))
       except: pass
     return max_id + 1
+
+def next_review_id(reviews):
+  max_id = 0
+  for r in reviews:
+    try: max_id = max(max_id, int(r.get('id', 0)))
+    except: pass
+  return max_id + 1
 
 valid_statuses = {'En attente', 'Confirm\u00e9e', 'Exp\u00e9di\u00e9e', 'Livr\u00e9e', 'Annul\u00e9e'}
 
@@ -319,6 +373,9 @@ class Handler(SimpleHTTPRequestHandler):
     elif re.match(r'^/api/media/.+$', parsed.path):
       key = parsed.path.split('/')[-1]
       self.serve_media(key)
+    elif parsed.path == '/api/reviews':
+      reviews = load_reviews()
+      self.send_json({'reviews': reviews})
     elif parsed.path == '/api/debug':
       info = {
         'use_db': use_db,
@@ -353,6 +410,24 @@ class Handler(SimpleHTTPRequestHandler):
       save_orders(orders)
       send_order_email(order)
       self.send_json({ 'success': True, 'id': oid })
+    elif self.path == '/api/reviews':
+      length = int(self.headers.get('Content-Length', 0))
+      body = self.rfile.read(length) if length else b'{}'
+      try: data = json.loads(body)
+      except: return self.send_err(400, 'Invalid JSON')
+      reviews = load_reviews()
+      rid = next_review_id(reviews)
+      review = {
+        'id': rid,
+        'name': data.get('name', 'Anonyme'),
+        'rating': int(data.get('rating', 5)),
+        'text': data.get('text', ''),
+        'date': datetime.now(timezone.utc).isoformat(),
+        'product_name': data.get('product_name', '')
+      }
+      reviews.insert(0, review)
+      save_reviews(reviews)
+      self.send_json({'success': True, 'id': rid})
     elif self.path == '/api/products':
       if not auth_ok(self.headers): return self.send_err(401, 'Unauthorized')
       length = int(self.headers.get('Content-Length', 0))
