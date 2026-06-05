@@ -2001,6 +2001,10 @@ section {
     position: relative;
   }
 
+  .header-transparent {
+    position: absolute;
+  }
+
   .hero-content h1 {
     white-space: nowrap;
   }
