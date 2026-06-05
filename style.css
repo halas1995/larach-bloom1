@@ -291,34 +291,29 @@ body {
 
 .essence-section {
   position: relative;
-  height: 70vh;
-  min-height: 400px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   text-align: center;
   overflow: hidden;
 }
 
 .essence-video {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.essence-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1;
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+  display: block;
 }
 
 .essence-content {
-  position: relative;
+  position: absolute;
+  top: 16px;
+  left: 0;
+  right: 0;
   z-index: 2;
   max-width: 900px;
+  margin: 0 auto;
   padding: 0 24px;
   color: #fff;
 }
@@ -1966,7 +1961,6 @@ section {
 
   .essence-why-card {
     padding: 20px 14px;
-    background: rgba(255, 255, 255, 0.1);
   }
 
   .essence-why-card p {
