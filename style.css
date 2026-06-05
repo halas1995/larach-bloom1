@@ -1611,7 +1611,7 @@ section {
 
 .hp-flowers-bg {
   position: relative;
-  background: #fcf9f5;
+  background: #f8f1ea;
 }
 
 .hp-flower-art {
@@ -1621,6 +1621,7 @@ section {
   height: 100%;
   pointer-events: none;
   z-index: 0;
+  opacity: 0.5;
 }
 
 .hp-flowers-bg .hp-best-sellers,
