@@ -330,7 +330,7 @@
       }
     }
     if (!alba) return;
-    document.getElementById('spotlightImage').innerHTML = '<video autoplay muted loop playsinline poster="' + (alba.image || '') + '" style="width:100%;height:100%;object-fit:cover;display:block"><source src="/api/media/video-off" type="video/mp4"></video>';
+    document.getElementById('spotlightImage').innerHTML = '<img src="' + (alba.image || '') + '" alt="' + alba.name + '" loading="lazy">';
     document.getElementById('spotlightCat').textContent = alba.cat || '';
     document.getElementById('spotlightTitle').textContent = alba.name;
     document.getElementById('spotlightDesc').textContent = alba.desc || 'Une routine compl\u00e8te compos\u00e9e d\'un gel douche, d\'un gommage et d\'une huile s\u00e8che \u00e0 la fleur d\'oranger pour une peau sublim\u00e9e au quotidien.';
