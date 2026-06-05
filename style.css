@@ -1355,6 +1355,42 @@ section {
   text-align: center;
 }
 
+.hp-best-sale .hp-best-img {
+  position: relative;
+}
+
+.hp-sale-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  background: #c4b59a;
+  color: #fff;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  font-weight: 400;
+}
+
+.hp-price-sale {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.hp-price-original {
+  font-size: 14px;
+  color: #b5aba3;
+  text-decoration: line-through;
+  margin-right: 8px;
+}
+
+.hp-price-current {
+  font-size: 20px;
+  color: #8b7355;
+  font-weight: 500;
+}
+
 .hp-best-img {
   width: 100%;
   aspect-ratio: 1;

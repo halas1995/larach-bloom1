@@ -269,15 +269,21 @@
       if (best.length === 0) best = all.slice(0, 2);
       for (var j = 0; j < best.length; j++) {
         var p = best[j];
+        var isAlba = p.name && p.name.toLowerCase().indexOf('alba') !== -1;
         var div = document.createElement('div');
-        div.className = 'hp-best-card';
+        div.className = isAlba ? 'hp-best-card hp-best-sale' : 'hp-best-card';
         div.innerHTML =
-          '<div class="hp-best-img"><img src="' + (p.image || '') + '" alt="' + p.name + '" loading="lazy"></div>' +
+          '<div class="hp-best-img">' +
+            (isAlba ? '<span class="hp-sale-badge">OFFRE SP&Eacute;CIALE</span>' : '') +
+            '<img src="' + (p.image || '') + '" alt="' + p.name + '" loading="lazy">' +
+          '</div>' +
           '<div class="hp-best-info">' +
             '<span class="hp-best-cat">' + (p.cat || '') + '</span>' +
             '<h3>' + p.name + '</h3>' +
-            '<span class="hp-best-price">' + (p.price || 0) + ' DH</span>' +
-            '<a href="product-detail.html?id=' + p.id + '" class="hp-best-link">D&eacute;couvrir</a>' +
+            (isAlba
+              ? '<span class="hp-price-sale"><span class="hp-price-original">490 DH</span> <span class="hp-price-current">' + (p.price || 0) + ' DH</span></span>'
+              : '<span class="hp-best-price">' + (p.price || 0) + ' DH</span>') +
+            '<a href="product-detail.html?id=' + p.id + '" class="hp-best-link">' + (isAlba ? 'Profiter de l&rsquo;offre' : 'D&eacute;couvrir') + '</a>' +
           '</div>';
         bestGrid.appendChild(div);
       }
