@@ -300,7 +300,7 @@ body {
 }
 
 .essence-video {
-  width: 60%;
+  width: 75%;
   height: auto;
   max-height: 90vh;
   object-fit: contain;
@@ -308,11 +308,11 @@ body {
 }
 
 .essence-content {
-  width: 40%;
+  width: 25%;
   z-index: 2;
-  max-width: 440px;
+  max-width: 320px;
   margin: 0 auto;
-  padding: 60px 40px;
+  padding: 60px 30px;
   color: #3d3530;
   text-align: left;
 }
