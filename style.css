@@ -1470,11 +1470,6 @@ section {
 .hp-flowers-bg {
   position: relative;
   background: #f8f1ea;
-  background-image: url('assets/images/background-flower.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
 }
 
 .hp-flowers-bg::before {
