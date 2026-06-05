@@ -148,7 +148,9 @@
     <div class="container">
       <span class="section-label">T&eacute;moignages</span>
       <h2 class="section-title">Ce que nos clientes disent</h2>
-      <div class="hp-reviews-grid" id="reviewsGrid"></div>
+      <div class="hp-reviews-carousel">
+        <div class="hp-reviews-track" id="reviewsTrack"></div>
+      </div>
       <button class="hp-review-toggle" id="reviewToggle" onclick="document.getElementById('reviewForm').classList.toggle('active')">Laisser un avis</button>
       <div class="hp-review-form" id="reviewForm">
         <h3>Partagez votre exp&eacute;rience</h3>
@@ -247,23 +249,30 @@
   }
 
   function renderReviews(list) {
-    var grid = document.getElementById('reviewsGrid');
-    if (!grid) return;
-    for (var i = 0; i < list.length; i++) {
-      var r = list[i];
-      var div = document.createElement('div');
-      div.className = 'hp-review-card';
+    var track = document.getElementById('reviewsTrack');
+    if (!track) return;
+    function buildCard(r) {
       var stars = '';
       for (var s = 0; s < 5; s++) {
         stars += '<svg width="12" height="12" viewBox="0 0 24 24"><path fill="' + (s < r.rating ? '#c4b59a' : '#e5ddd5') + '" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
       }
       var name = r.name || 'Anonyme';
       var prod = r.product_name ? ' sur ' + r.product_name : '';
+      var div = document.createElement('div');
+      div.className = 'hp-review-card';
       div.innerHTML =
         '<div class="hp-review-stars">' + stars + '</div>' +
         '<p>"' + r.text + '"</p>' +
         '<span class="hp-review-author">&mdash; ' + name + prod + '</span>';
-      grid.appendChild(div);
+      return div;
+    }
+    track.innerHTML = '';
+    for (var i = 0; i < list.length; i++) {
+      track.appendChild(buildCard(list[i]));
+    }
+    // duplicate for seamless loop
+    for (var j = 0; j < list.length; j++) {
+      track.appendChild(buildCard(list[j]));
     }
   }
 
@@ -288,7 +297,7 @@
         document.getElementById('reviewForm').classList.remove('active');
         setTimeout(function() {
           document.getElementById('reviewMsg').textContent = '';
-          var grid = document.getElementById('reviewsGrid');
+          var grid = document.getElementById('reviewsTrack');
           if (grid) grid.innerHTML = '';
           loadReviews();
         }, 1500);

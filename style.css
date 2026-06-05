@@ -1492,17 +1492,35 @@ section {
   z-index: 1;
 }
 
-.hp-reviews-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
+.hp-reviews-carousel {
+  overflow: hidden;
   margin-bottom: 40px;
+  position: relative;
+}
+
+.hp-reviews-track {
+  display: flex;
+  gap: 32px;
+  width: max-content;
+  animation: reviewScroll 30s linear infinite;
+}
+
+.hp-reviews-carousel:hover .hp-reviews-track {
+  animation-play-state: paused;
+}
+
+@keyframes reviewScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .hp-review-card {
   text-align: center;
   padding: 32px 20px;
   background: #fff;
+  min-width: 280px;
+  max-width: 320px;
+  flex-shrink: 0;
 }
 
 .hp-review-stars {
@@ -1756,79 +1774,11 @@ section {
     grid-template-columns: 1fr;
   }
 
-  .hp-products-grid,
-  .hp-reviews-grid {
+  .hp-products-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .hp-philo-text {
-    padding: 60px 40px;
-  }
-
-  .hp-review-card {
-    padding: 24px 16px;
-  }
-}
-
-@media (max-width: 768px) {
-  .footer-inner {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .header-inner {
-    gap: 16px;
-  }
-
-  .header-transparent .nav a {
-    color: rgba(255, 255, 255, 0.9);
-  }
-
-  .nav {
-    display: none;
-  }
-
-  .hero {
-    height: 100vh;
-    min-height: 500px;
-  }
-
-  .hero-content {
-    padding: 0 24px;
-  }
-
-  .hero-content h1 {
-    font-size: clamp(36px, 12vw, 56px);
-    letter-spacing: 2px;
-  }
-
-  .hero-tagline {
-    letter-spacing: 4px;
-    font-size: 10px;
-  }
-
-  .hero-btn {
-    padding: 12px 36px;
-    font-size: 10px;
-  }
-
-  .essence-section {
-    height: auto;
-    min-height: 300px;
-    padding: 80px 0;
-  }
-
-  .essence-content {
-    max-width: 100%;
-  }
-
-  .essence-why {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-top: 32px;
-  }
-
-  .hp-products-grid,
-  .hp-reviews-grid {
+  .hp-products-grid {
     grid-template-columns: 1fr;
     gap: 24px;
   }
