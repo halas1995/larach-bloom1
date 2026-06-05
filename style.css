@@ -2001,6 +2001,23 @@ section {
     position: absolute;
   }
 
+  .header-inner {
+    padding: 8px 14px;
+  }
+
+  .logo img {
+    height: 40px;
+  }
+
+  .nav {
+    gap: 14px;
+  }
+
+  .nav a {
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
   .hero-content h1 {
     white-space: nowrap;
   }
