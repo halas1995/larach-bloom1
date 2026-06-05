@@ -315,7 +315,7 @@ body {
 .essence-content {
   position: relative;
   z-index: 2;
-  max-width: 640px;
+  max-width: 900px;
   padding: 0 24px;
   color: #fff;
 }
@@ -325,6 +325,45 @@ body {
   font-weight: 200;
   line-height: 1.8;
   opacity: 0.85;
+}
+
+.essence-why {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.essence-why-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 28px 20px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.essence-why-icon {
+  font-size: 24px;
+  color: #c4b59a;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.essence-why-card h4 {
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.essence-why-card p {
+  font-size: 13px;
+  line-height: 1.7;
+  opacity: 0.75;
 }
 
 .hero-btn {
@@ -1784,8 +1823,19 @@ section {
   }
 
   .essence-section {
-    height: 50vh;
+    height: auto;
     min-height: 300px;
+    padding: 80px 0;
+  }
+
+  .essence-content {
+    max-width: 100%;
+  }
+
+  .essence-why {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 32px;
   }
 
   .hp-best-grid {
