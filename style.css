@@ -1683,90 +1683,12 @@ section {
   text-align: center;
 }
 
-/* Ingredients */
-.hp-ingredients {
-  text-align: center;
-}
-
-.hp-ingr-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 48px;
-  margin-top: 48px;
-}
-
-.hp-ingr-card {
-  text-align: center;
-  padding: 40px 24px;
-}
-
-.hp-ingr-icon {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 20px;
-  border-radius: 50%;
-  background: #f0ebe5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #c4b59a;
-}
-
-.hp-ingr-card h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  font-weight: 400;
-  color: #3d3530;
-  margin-bottom: 12px;
-  letter-spacing: 1px;
-}
-
-.hp-ingr-card p {
-  font-size: 13px;
-  line-height: 1.7;
-  color: #8a8078;
-}
-
-/* Final CTA */
-.hp-cta {
-  text-align: center;
-  position: relative;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 60%, rgba(196, 181, 154, 0.12) 0%, transparent 100%),
-    linear-gradient(160deg, #f0ebe5 0%, #f8f5f0 40%, #ede8e2 100%);
-}
-
-.hp-cta-content {
-  position: relative;
-  z-index: 2;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.hp-cta-content h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 32px;
-  font-weight: 300;
-  color: #3d3530;
-  margin-bottom: 16px;
-  letter-spacing: 2px;
-}
-
-.hp-cta-content p {
-  font-size: 14px;
-  line-height: 1.8;
-  color: #8a8078;
-  margin-bottom: 36px;
-}
-
 @media (max-width: 1024px) {
   .checkout-layout {
     grid-template-columns: 1fr;
   }
 
   .hp-products-grid,
-  .hp-ingr-grid,
   .hp-reviews-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1779,7 +1701,6 @@ section {
     padding: 60px 40px;
   }
 
-  .hp-ingr-card,
   .hp-review-card {
     padding: 24px 16px;
   }
@@ -1837,7 +1758,6 @@ section {
   }
 
   .hp-products-grid,
-  .hp-ingr-grid,
   .hp-reviews-grid {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -1858,10 +1778,6 @@ section {
 
   .hp-philo-visual {
     min-height: 240px;
-  }
-
-  .hp-cta-content h2 {
-    font-size: 26px;
   }
 
   .admin-side {
@@ -2047,7 +1963,6 @@ section {
     font-size: 22px;
   }
 
-  .hp-ingr-card p,
   .hp-review-card p {
     font-size: 13px;
   }
