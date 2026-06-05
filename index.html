@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="preload" href="/api/media/video-off" as="video" type="video/mp4">
 </head>
 <body>
 
@@ -48,7 +49,7 @@
       <span class="section-label light" data-i18n="essenceLabel">Notre Essence</span>
       <p data-i18n="essenceText">Chez Larach Bloom, chaque soin est inspir\u00e9 de la nature marocaine et con\u00e7u pour r\u00e9v\u00e9ler l'\u00e9clat naturel de votre peau. Des ingr\u00e9dients purs, un savoir-faire authentique, pour une beaut\u00e9 qui vous ressemble.</p>
     </div>
-    <video class="essence-video" autoplay muted loop playsinline poster="assets/media/background.jpg">
+    <video class="essence-video" autoplay muted loop playsinline poster="assets/media/background.jpg" preload="auto">
       <source src="/api/media/video-off" type="video/mp4">
     </video>
   </section>
