@@ -183,6 +183,18 @@ body {
 .header-right {
   display: flex;
   align-items: center;
+  gap: 12px;
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #8a8078;
+  cursor: pointer;
+  padding: 4px;
+}
   gap: 16px;
 }
 
@@ -321,7 +333,7 @@ body {
 }
 
 .essence-content p {
-  font-size: clamp(14px, 1.6vw, 18px);
+  font-size: clamp(13px, 1.6vw, 18px);
   font-weight: 200;
   line-height: 1.8;
   opacity: 0.85;
@@ -1954,6 +1966,67 @@ section {
   }
   .detail-price {
     font-size: 20px;
+  }
+
+  .essence-section {
+    height: auto;
+    min-height: 0;
+    padding: 60px 0;
+  }
+
+  .essence-why {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .essence-why-card {
+    padding: 20px 14px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .essence-why-card p {
+    font-size: 12px;
+  }
+
+  .essence-content {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+
+  .essence-content p {
+    font-size: 13px;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: #fff;
+    padding: 16px 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    z-index: 100;
+  }
+
+  .nav.open {
+    display: flex;
+  }
+
+  .nav a {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0ede8;
+  }
+
+  .header {
+    position: relative;
   }
 }
 
