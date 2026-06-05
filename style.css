@@ -296,6 +296,7 @@ body {
   justify-content: center;
   text-align: center;
   overflow: hidden;
+  background: #1a1a1a;
 }
 
 .essence-video {
