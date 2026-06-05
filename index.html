@@ -124,12 +124,25 @@
       </g>
     </svg>
 
-<div id="salePopup" class="sale-popup-overlay" onclick="if(event.target===this)closeSalePopup()">
-  <div class="sale-popup">
-    <button class="sale-popup-close" onclick="closeSalePopup()">&times;</button>
-    <div class="sale-popup-content" id="salePopupContent"></div>
-  </div>
-</div>
+  <section class="hp-spotlight" id="bestSellerSpotlight">
+    <div class="container">
+      <span class="section-label">Les Incontournables</span>
+      <h2 class="section-title">Nos Best-Sellers</h2>
+    </div>
+    <div class="hp-spotlight-inner">
+      <div class="hp-spotlight-visual">
+        <span class="hp-spotlight-badge">Offre Sp&eacute;ciale</span>
+        <div class="hp-spotlight-image" id="spotlightImage"></div>
+      </div>
+      <div class="hp-spotlight-info">
+        <span class="hp-spotlight-cat" id="spotlightCat"></span>
+        <h2 class="hp-spotlight-title" id="spotlightTitle"></h2>
+        <p class="hp-spotlight-desc" id="spotlightDesc"></p>
+        <div class="hp-spotlight-prices" id="spotlightPrices"></div>
+        <a id="spotlightLink" class="hp-spotlight-btn" href="#">D&eacute;couvrir</a>
+      </div>
+    </div>
+  </section>
 
   <section class="hp-reviews" id="reviews">
     <div class="container">
@@ -294,13 +307,13 @@
       try {
         var resp = JSON.parse(xhr.responseText);
         var products = resp.products || [];
-        if (products.length) renderHomeProducts(products);
+        renderSpotlight(products);
       } catch(e) {}
     }
   };
   xhr.send();
 
-  function renderHomeProducts(all) {
+  function renderSpotlight(all) {
     var alba = null;
     for (var i = 0; i < all.length; i++) {
       var p = all[i];
@@ -309,27 +322,13 @@
         break;
       }
     }
-    if (alba) {
-      var content = document.getElementById('salePopupContent');
-      content.innerHTML =
-        '<div class="hp-best-card hp-best-sale">' +
-          '<div class="hp-best-img">' +
-            '<span class="hp-sale-badge">OFFRE SP&Eacute;CIALE</span>' +
-            '<img src="' + (alba.image || '') + '" alt="' + alba.name + '" loading="lazy">' +
-          '</div>' +
-          '<div class="hp-best-info">' +
-            '<span class="hp-best-cat">' + (alba.cat || '') + '</span>' +
-            '<h3>' + alba.name + '</h3>' +
-            '<span class="hp-price-sale"><span class="hp-price-original">490 DH</span> <span class="hp-price-current">' + (alba.price || 0) + ' DH</span></span>' +
-            '<a href="product-detail.html?id=' + alba.id + '" class="hp-best-link">Profiter de l&rsquo;offre</a>' +
-          '</div>' +
-        '</div>';
-      document.getElementById('salePopup').classList.add('active');
-    }
-  }
-
-  function closeSalePopup() {
-    document.getElementById('salePopup').classList.remove('active');
+    if (!alba) return;
+    document.getElementById('spotlightImage').innerHTML = '<img src="' + (alba.image || '') + '" alt="' + alba.name + '" loading="lazy">';
+    document.getElementById('spotlightCat').textContent = alba.cat || '';
+    document.getElementById('spotlightTitle').textContent = alba.name;
+    document.getElementById('spotlightDesc').textContent = alba.desc || 'Une routine compl\u00e8te compos\u00e9e d\'un gel douche, d\'un gommage et d\'une huile s\u00e8che \u00e0 la fleur d\'oranger pour une peau sublim\u00e9e au quotidien.';
+    document.getElementById('spotlightPrices').innerHTML = '<span class="hp-spotlight-original">490 DH</span> <span class="hp-spotlight-current">' + (alba.price || 0) + ' DH</span>';
+    document.getElementById('spotlightLink').href = 'product-detail.html?id=' + alba.id;
   }
 
   loadReviews();
