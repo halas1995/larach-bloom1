@@ -1378,19 +1378,6 @@ section {
 
 /* ========== HOMEPAGE LUXURY SECTIONS ========== */
 
-.hp-best-sellers {
-  text-align: center;
-  padding: 60px 0;
-}
-
-.hp-best-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-  max-width: 420px;
-  margin: 0 auto;
-}
-
 .hp-best-card {
   text-align: center;
 }
@@ -1434,6 +1421,66 @@ section {
 .hp-best-link {
   display: inline-block;
   margin-top: 4px;
+}
+
+/* Sale popup */
+.sale-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.sale-popup-overlay.active {
+  display: flex;
+}
+
+.sale-popup {
+  background: #fff;
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+  animation: saleFadeIn 0.4s ease;
+}
+
+@keyframes saleFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.sale-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 28px;
+  color: #b5aba3;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.sale-popup-close:hover {
+  color: #3d3530;
+}
+
+.sale-popup-content .hp-best-card {
+  text-align: center;
+}
+
+.sale-popup-content .hp-best-img {
+  max-width: 240px;
+  margin: 0 auto 16px;
+}
+
+.sale-popup-content .hp-best-img img {
+  width: 100%;
+  display: block;
 }
 
 .hp-best-sale .hp-best-img {
@@ -1500,7 +1547,6 @@ section {
   display: none;
 }
 
-.hp-flowers-bg .hp-best-sellers,
 .hp-flowers-bg .hp-reviews {
   position: relative;
   z-index: 1;
@@ -1666,10 +1712,6 @@ section {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .hp-best-grid {
-    gap: 32px;
-  }
-
   .hp-philo-text {
     padding: 60px 40px;
   }
@@ -1734,11 +1776,6 @@ section {
     grid-template-columns: 1fr;
     gap: 16px;
     margin-top: 32px;
-  }
-
-  .hp-best-grid {
-    grid-template-columns: 1fr;
-    max-width: 400px;
   }
 
   .hp-products-grid,
