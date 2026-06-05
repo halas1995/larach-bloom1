@@ -75,14 +75,6 @@
     </div>
   </section>
 
-  <section class="hp-products hp-products-alt">
-    <div class="container">
-      <span class="section-label">La Collection</span>
-      <h2 class="section-title">Tous nos soins</h2>
-      <div class="hp-products-grid" id="homeProductsGrid"></div>
-    </div>
-  </section>
-
   <section class="hp-reviews" id="reviews">
     <div class="container">
       <span class="section-label">T&eacute;moignages</span>
@@ -279,24 +271,6 @@
       }
     }
 
-    var homeGrid = document.getElementById('homeProductsGrid');
-    if (homeGrid) {
-      for (var k = 0; k < all.length; k++) {
-        var pr = all[k];
-        var cd = document.createElement('div');
-        cd.className = 'hp-product-card';
-        cd.innerHTML =
-          '<div class="hp-product-img" onclick="window.location.href=\'product-detail.html?id=' + pr.id + '\'">' +
-            '<img src="' + (pr.image || '') + '" alt="' + pr.name + '" loading="lazy">' +
-          '</div>' +
-          '<div class="hp-product-info">' +
-            '<h3>' + pr.name + '</h3>' +
-            '<span class="hp-product-price">' + (pr.price || 0) + ' DH</span>' +
-            '<button class="hp-product-add" onclick="add(' + pr.id + ')">' + (typeof t === 'function' ? t('addToCart') : 'Ajouter') + '</button>' +
-          '</div>';
-        homeGrid.appendChild(cd);
-      }
-    }
   }
 
   loadReviews();
