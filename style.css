@@ -1605,7 +1605,28 @@ section {
 
 /* Reviews */
 .hp-reviews {
-  text-align: center;
+  padding: 100px 0;
+  position: relative;
+}
+
+.hp-flowers-bg {
+  position: relative;
+  background: #fcf9f5;
+}
+
+.hp-flower-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hp-flowers-bg .hp-best-sellers,
+.hp-flowers-bg .hp-reviews {
+  position: relative;
+  z-index: 1;
 }
 
 .hp-reviews-grid {
