@@ -296,7 +296,7 @@ body {
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
-  background: #3d3530;
+  background: #f8f1ea;
 }
 
 .essence-video {
@@ -313,8 +313,12 @@ body {
   max-width: 540px;
   margin: 0 auto;
   padding: 60px 40px;
-  color: #fff;
+  color: #3d3530;
   text-align: left;
+}
+
+.essence-content .section-label.light {
+  color: #8a7a6a;
 }
 
 .essence-content p {
