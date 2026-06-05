@@ -292,15 +292,15 @@ body {
 .essence-section {
   position: relative;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  text-align: center;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   overflow: hidden;
-  background: #1a1a1a;
+  background: #3d3530;
 }
 
 .essence-video {
-  width: 100%;
+  width: 50%;
   height: auto;
   max-height: 90vh;
   object-fit: contain;
@@ -308,15 +308,13 @@ body {
 }
 
 .essence-content {
-  position: absolute;
-  top: 16px;
-  left: 0;
-  right: 0;
+  width: 50%;
   z-index: 2;
-  max-width: 900px;
+  max-width: 540px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 60px 40px;
   color: #fff;
+  text-align: left;
 }
 
 .essence-content p {
@@ -1949,9 +1947,20 @@ section {
   }
 
   .essence-section {
-    height: auto;
-    min-height: 0;
-    padding: 40px 0;
+    flex-direction: column;
+    padding: 32px 16px;
+  }
+
+  .essence-video {
+    width: 100%;
+    max-height: 60vh;
+  }
+
+  .essence-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 0 24px 0;
+    text-align: center;
   }
 
   .essence-why {
@@ -1968,14 +1977,6 @@ section {
     font-size: 12px;
   }
 
-  .essence-content {
-    max-width: 100%;
-    padding: 0 16px;
-  }
-
-  .essence-content p {
-    font-size: 13px;
-  }
 
   .nav-toggle {
     display: none;
