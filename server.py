@@ -217,6 +217,18 @@ if use_db:
       print(f'[LARACH] seed_media error: {e}')
 
   video_path = os.path.join(ROOT, 'assets', 'media', 'video-off.mp4')
+  if not os.path.exists(video_path):
+    chunks_dir = os.path.join(ROOT, 'assets', 'media', 'video-chunks')
+    if os.path.isdir(chunks_dir):
+      chunk_files = sorted(os.listdir(chunks_dir))
+      if chunk_files:
+        combined = b''
+        for cf in chunk_files:
+          with open(os.path.join(chunks_dir, cf), 'rb') as fh:
+            combined += fh.read()
+        with open(video_path, 'wb') as fh:
+          fh.write(combined)
+        print(f'[LARACH] Combined video chunks into {video_path}')
   threading.Thread(target=seed_media, args=('video-off', video_path, 'video/mp4'),
                    kwargs={'fallback_url': 'https://larach-bloom.com/assets/media/video-off.mp4'},
                    daemon=True).start()
