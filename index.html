@@ -9,12 +9,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="/">
 <link rel="preload" href="/api/media/video-off" as="video" type="video/mp4">
+<link rel="preload" href="/assets/media/background.jpg" as="image">
 </head>
 <body>
 
 <section class="hero" id="hero">
-  <video class="hero-bg" autoplay muted loop playsinline preload="auto">
+  <video class="hero-bg" autoplay muted loop playsinline preload="auto" poster="/assets/media/background.jpg">
     <source src="/api/media/video-off" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
