@@ -292,7 +292,7 @@ body {
 .essence-section {
   position: relative;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   align-items: center;
   overflow: hidden;
   background: #f8f1ea;
