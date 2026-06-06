@@ -551,6 +551,11 @@ class Handler(SimpleHTTPRequestHandler):
 
   def serve_media(self, key):
     try:
+      self.serve_static(key)
+      return
+    except:
+      pass
+    try:
       conn = get_db()
       cur = conn.cursor()
       cur.execute('SELECT data, mime FROM media WHERE key = %s', (key,))
