@@ -299,7 +299,7 @@ body {
 }
 
 .essence-video {
-  width: 75%;
+  width: 60%;
   height: auto;
   max-height: 90vh;
   object-fit: contain;
@@ -308,12 +308,17 @@ body {
 }
 
 .essence-content {
-  width: 25%;
+  flex: 1;
   z-index: 2;
-  max-width: 320px;
-  padding: 60px 30px;
+  max-width: 480px;
+  padding: 50px 40px;
+  margin: 30px 0 30px 40px;
   color: #3d3530;
   text-align: left;
+  border: 2px solid #c4b59a;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
 .essence-content .section-label.light {
@@ -1951,7 +1956,7 @@ section {
 
   .essence-section {
     flex-direction: column;
-    padding: 32px 16px;
+    padding: 24px 16px;
   }
 
   .essence-video {
@@ -1961,10 +1966,12 @@ section {
   }
 
   .essence-content {
+    flex: none;
     width: 100%;
     max-width: 100%;
-    padding: 0 0 24px 0;
-    text-align: center;
+    padding: 24px 20px;
+    margin: 0 0 20px 0;
+    border-width: 1px;
   }
 
   .essence-why {
