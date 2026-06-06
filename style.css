@@ -184,8 +184,6 @@ body {
 .header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
   gap: 16px;
 }
 
@@ -1659,25 +1657,97 @@ section {
   text-align: center;
 }
 
-/* Spotlight editorial section */
+/* Spotlight editorial section — framed card */
 .hp-spotlight {
-  padding: 80px 0;
+  padding: 100px 0;
   position: relative;
   z-index: 1;
+  background: #f8f1ea;
 }
 
-.hp-spotlight-inner {
+.hp-spotlight .section-label,
+.hp-spotlight .section-title {
+  text-align: center;
+}
+
+.hp-spotlight-card {
+  max-width: 1000px;
+  margin: 48px auto 0;
+  padding: 0 24px;
+}
+
+.hp-spotlight-card-inner {
+  position: relative;
+  background: #fff;
+  border: 2px solid #c4b59a;
+  padding: 48px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 24px;
   align-items: center;
-  gap: 60px;
+  gap: 56px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
+}
+
+/* Ornate corners */
+.hp-spotlight-card-inner::before,
+.hp-spotlight-card-inner::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-color: #c4b59a;
+  border-style: solid;
+  pointer-events: none;
+}
+.hp-spotlight-card-inner::before {
+  top: -2px;
+  left: -2px;
+  border-width: 2px 0 0 2px;
+}
+.hp-spotlight-card-inner::after {
+  bottom: -2px;
+  right: -2px;
+  border-width: 0 2px 2px 0;
+}
+
+/* Inner corner accents */
+.hp-spotlight-corner-tl,
+.hp-spotlight-corner-br {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: #c4b59a;
+  border-style: solid;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.hp-spotlight-corner-tl {
+  top: 16px;
+  left: 16px;
+  border-width: 1px 0 0 1px;
+}
+.hp-spotlight-corner-br {
+  bottom: 16px;
+  right: 16px;
+  border-width: 0 1px 1px 0;
 }
 
 .hp-spotlight-visual {
   position: relative;
+}
+
+.hp-spotlight-image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  position: relative;
+}
+
+.hp-spotlight-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .hp-spotlight-badge {
@@ -1690,21 +1760,8 @@ section {
   font-size: 9px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  padding: 8px 18px;
-  font-weight: 400;
-}
-
-.hp-spotlight-image {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-}
-
-.hp-spotlight-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+  padding: 10px 22px;
+  font-weight: 500;
 }
 
 .hp-spotlight-info {
@@ -1713,43 +1770,58 @@ section {
 
 .hp-spotlight-cat {
   font-size: 10px;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  color: #b5aba3;
+  color: #c4b59a;
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  font-weight: 500;
 }
 
 .hp-spotlight-title {
-  font-size: clamp(22px, 2.4vw, 30px);
-  font-weight: 300;
+  font-size: clamp(22px, 2.6vw, 34px);
+  font-weight: 400;
   color: #3d3530;
-  margin-bottom: 16px;
-  line-height: 1.3;
+  margin-bottom: 8px;
+  line-height: 1.25;
+  font-family: 'Playfair Display', serif;
 }
 
 .hp-spotlight-desc {
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.9;
   color: #8a8078;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+
+.hp-spotlight-divider {
+  width: 40px;
+  height: 1px;
+  background: #c4b59a;
+  margin: 0 0 28px;
+  opacity: 0.5;
 }
 
 .hp-spotlight-prices {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
 }
 
 .hp-spotlight-original {
-  font-size: 16px;
+  font-size: 15px;
   color: #b5aba3;
   text-decoration: line-through;
-  margin-right: 12px;
+  font-weight: 300;
 }
 
 .hp-spotlight-current {
-  font-size: 26px;
+  font-size: 28px;
   color: #8b7355;
   font-weight: 500;
+  letter-spacing: 1px;
 }
 
 .hp-spotlight-btn {
@@ -1760,8 +1832,9 @@ section {
   color: #fff;
   background: #3d3530;
   text-decoration: none;
-  padding: 14px 40px;
-  transition: background 0.3s;
+  padding: 16px 52px;
+  transition: all 0.4s;
+  position: relative;
 }
 
 .hp-spotlight-btn:hover {
@@ -2059,13 +2132,19 @@ section {
     font-size: 18px;
   }
 
-  .hp-spotlight-inner {
+  .hp-spotlight-card-inner {
     grid-template-columns: 1fr;
     gap: 32px;
+    padding: 28px;
   }
 
   .hp-spotlight-image {
     aspect-ratio: 4 / 5;
+  }
+
+  .hp-spotlight-corner-tl,
+  .hp-spotlight-corner-br {
+    display: none;
   }
 
   .hp-philo-text h2 {
