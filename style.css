@@ -304,13 +304,13 @@ body {
   max-height: 90vh;
   object-fit: contain;
   display: block;
+  margin-left: auto;
 }
 
 .essence-content {
   width: 25%;
   z-index: 2;
   max-width: 320px;
-  margin: 0 auto;
   padding: 60px 30px;
   color: #3d3530;
   text-align: left;
