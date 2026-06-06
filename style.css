@@ -308,11 +308,12 @@ body {
 }
 
 .essence-content {
-  flex: 1;
+  flex: none;
   z-index: 2;
-  max-width: 800px;
-  padding: 50px 40px;
-  margin: 30px 20px 30px 40px;
+  width: auto;
+  max-width: 320px;
+  padding: 40px 30px;
+  margin: 30px 0 30px 40px;
   color: #3d3530;
   text-align: left;
   border: 2px solid #c4b59a;
