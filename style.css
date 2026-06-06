@@ -331,41 +331,111 @@ body {
   opacity: 0.85;
 }
 
-.essence-why {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 48px;
+.essence-why-section {
+  padding: 80px 0;
+  background: #f0ebe5;
+  position: relative;
 }
 
-.essence-why-card {
-  background: #4e0806;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 28px 20px;
-  border-radius: 4px;
+.essence-why-section .section-label,
+.essence-why-section .section-title {
   text-align: center;
 }
 
+.essence-why {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1040px;
+  margin: 48px auto 0;
+  padding: 0 24px;
+}
+
+.essence-why-card {
+  position: relative;
+}
+
+.essence-why-card-frame {
+  position: relative;
+  background: #4e0806;
+  padding: 44px 28px 36px;
+  text-align: center;
+  border: 1px solid rgba(196, 181, 154, 0.25);
+}
+
+/* Outer decorative frame */
+.essence-why-card-frame::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 1px solid rgba(196, 181, 154, 0.15);
+  pointer-events: none;
+}
+
+/* Corner ornaments */
+.essence-why-corner-tl,
+.essence-why-corner-br {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: #c4b59a;
+  border-style: solid;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.essence-why-corner-tl {
+  top: 8px;
+  left: 8px;
+  border-width: 1px 0 0 1px;
+}
+
+.essence-why-corner-br {
+  bottom: 8px;
+  right: 8px;
+  border-width: 0 1px 1px 0;
+}
+
+.essence-why-icon-wrap {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 16px;
+  border: 1px solid rgba(196, 181, 154, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
 .essence-why-icon {
-  font-size: 24px;
+  font-size: 22px;
   color: #c4b59a;
   display: block;
-  margin-bottom: 12px;
+  line-height: 1;
 }
 
-.essence-why-card h4 {
-  font-size: 13px;
-  letter-spacing: 2px;
+.essence-why-divider {
+  width: 30px;
+  height: 1px;
+  background: rgba(196, 181, 154, 0.4);
+  margin: 0 auto 20px;
+}
+
+.essence-why-card-frame h4 {
+  font-size: 14px;
+  letter-spacing: 3px;
   text-transform: uppercase;
   font-weight: 400;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
   color: #fff;
+  font-family: 'Playfair Display', serif;
 }
 
-.essence-why-card p {
+.essence-why-card-frame p {
   font-size: 13px;
-  line-height: 1.7;
-  opacity: 0.75;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 300;
 }
 
 .hero-btn {
@@ -2050,16 +2120,21 @@ section {
 
   .essence-why {
     grid-template-columns: 1fr;
-    gap: 12px;
-    margin-top: 24px;
+    gap: 16px;
+    margin-top: 28px;
   }
 
-  .essence-why-card {
-    padding: 20px 14px;
+  .essence-why-card-frame {
+    padding: 32px 20px 28px;
   }
 
-  .essence-why-card p {
+  .essence-why-card-frame p {
     font-size: 12px;
+  }
+
+  .essence-why-corner-tl,
+  .essence-why-corner-br {
+    display: none;
   }
 
 
