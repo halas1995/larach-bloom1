@@ -292,14 +292,14 @@ body {
 .essence-section {
   position: relative;
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
-  justify-content: center;
   overflow: hidden;
   background: #f8f1ea;
 }
 
 .essence-video {
-  width: 100%;
+  width: 75%;
   height: auto;
   max-height: 90vh;
   object-fit: contain;
@@ -307,13 +307,11 @@ body {
 }
 
 .essence-content {
-  position: absolute;
-  left: 40px;
-  top: 50%;
-  transform: translateY(-50%);
+  width: 25%;
   z-index: 2;
-  max-width: 380px;
-  padding: 30px;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 60px 30px;
   color: #3d3530;
   text-align: left;
 }
@@ -1959,14 +1957,10 @@ section {
   .essence-video {
     width: 100%;
     max-height: 60vh;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   .essence-content {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
     width: 100%;
     max-width: 100%;
     padding: 0 0 24px 0;
