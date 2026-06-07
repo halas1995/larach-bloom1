@@ -408,10 +408,11 @@ body {
 }
 
 .essence-why-icon {
-  font-size: 22px;
+  font-size: 26px;
   color: #c4b59a;
   display: block;
   line-height: 1;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
 }
 
 .essence-why-divider {
