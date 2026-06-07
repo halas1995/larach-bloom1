@@ -338,13 +338,13 @@ body {
 }
 
 .hp-essence-banner {
-  background: #f8f1ea;
+  background: #4e0806;
   padding: 36px 0;
   text-align: center;
 }
 
 .hp-essence-text {
-  color: #3d3530;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 16px;
   line-height: 1.9;
   max-width: 680px;
