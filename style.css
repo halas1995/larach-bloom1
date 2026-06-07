@@ -502,7 +502,7 @@ section {
 }
 
 .section-label {
-  font-size: 10px;
+  font-size: 13px;
   letter-spacing: 4px;
   text-transform: uppercase;
   color: #c4b59a;
@@ -1619,7 +1619,7 @@ section {
   background: transparent;
   color: #3d3530;
   border: 1px solid #c4b59a;
-  font-size: 10px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   cursor: pointer;
@@ -1840,7 +1840,7 @@ section {
 }
 
 .hp-spotlight-cat {
-  font-size: 10px;
+  font-size: 13px;
   letter-spacing: 4px;
   text-transform: uppercase;
   color: #c4b59a;
@@ -1882,14 +1882,14 @@ section {
 }
 
 .hp-spotlight-original {
-  font-size: 15px;
+  font-size: 18px;
   color: #b5aba3;
   text-decoration: line-through;
   font-weight: 300;
 }
 
 .hp-spotlight-current {
-  font-size: 28px;
+  font-size: 34px;
   color: #8b7355;
   font-weight: 500;
   letter-spacing: 1px;
