@@ -361,7 +361,7 @@
     document.getElementById('spotlightImage').innerHTML = '<img src="' + (alba.image || '') + '" alt="' + alba.name + '" loading="lazy">';
     document.getElementById('spotlightCat').textContent = alba.cat || '';
     document.getElementById('spotlightTitle').textContent = alba.name;
-    document.getElementById('spotlightDesc').textContent = alba.desc || 'Une routine compl\u00e8te compos\u00e9e d\'un gel douche, d\'un gommage et d\'une huile s\u00e8che \u00e0 la fleur d\'oranger pour une peau sublim\u00e9e au quotidien.';
+    document.getElementById('spotlightDesc').innerHTML = '<strong>Le Rituel Alba – Pack Complet</strong><br>Offrez à votre peau l\'ultime secret d\'éclat. Une routine en 3 étapes enrichie en ingrédients naturels d\'exception pour nettoyer, exfolier en douceur et hydrater intensément. Le résultat ? Une peau sublimée, satinée et délicatement parfumée au quotidien.';
     document.getElementById('spotlightPrices').innerHTML = '<span class="hp-spotlight-original">390 DH</span> <span class="hp-spotlight-current">' + (alba.price || 0) + ' DH</span>';
     document.getElementById('spotlightLink').href = 'product-detail.html?id=' + alba.id;
   }
