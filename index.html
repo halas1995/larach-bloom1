@@ -16,17 +16,10 @@
 <body>
 
 <section class="hero" id="hero">
-  <video class="hero-bg" autoplay muted playsinline preload="auto" id="heroVideo">
-    <source src="/assets/media/video-off.mp4#t=7" type="video/mp4">
+  <video class="hero-bg" autoplay muted loop playsinline preload="auto">
+    <source src="/assets/media/video-off.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
-<script>
-document.getElementById('heroVideo').addEventListener('timeupdate', function() {
-  if (this.currentTime >= this.duration - 0.3) {
-    this.currentTime = 7;
-  }
-});
-</script>
   <div class="top-bar"></div>
   <header class="header header-transparent">
     <div class="header-inner">
