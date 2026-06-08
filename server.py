@@ -341,9 +341,13 @@ def send_order_email(order):
       msg['Subject'] = subject
       msg.attach(MIMEText(html, 'html', 'utf-8'))
       try:
-        s = smtplib.SMTP('smtp.gmail.com', 587)
-        s.starttls()
-        s.login(SMTP_EMAIL, SMTP_PASSWORD)
+        try:
+          s = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+          s.login(SMTP_EMAIL, SMTP_PASSWORD)
+        except:
+          s = smtplib.SMTP('smtp.gmail.com', 587)
+          s.starttls()
+          s.login(SMTP_EMAIL, SMTP_PASSWORD)
         s.sendmail(SMTP_EMAIL, [to], msg.as_string())
         s.quit()
       except Exception as e:
