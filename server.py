@@ -372,7 +372,7 @@ LARACH BLOOM'''
       print(f'[EMAIL] SENDGRID_API_KEY set: {bool(SENDGRID_API_KEY)}, length: {len(SENDGRID_API_KEY) if SENDGRID_API_KEY else 0}')
       data = json.dumps({
         'personalizations': [{'to': [{'email': to}]}],
-        'from': {'email': 'contact@larach-bloom.com', 'name': 'LARACH BLOOM'},
+        'from': {'email': 'larachbloom@gmail.com', 'name': 'LARACH BLOOM'},
         'subject': subject,
         'content': [{'type': 'text/plain', 'value': text}, {'type': 'text/html', 'value': html}]
       }).encode()
