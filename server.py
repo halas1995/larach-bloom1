@@ -374,7 +374,7 @@ LARACH BLOOM'''
         'personalizations': [{'to': [{'email': to}]}],
         'from': {'email': 'larachbloom@gmail.com', 'name': 'LARACH BLOOM'},
         'subject': subject,
-        'content': [{'type': 'text/html', 'value': html}, {'type': 'text/plain', 'value': text}]
+        'content': [{'type': 'text/plain', 'value': text}, {'type': 'text/html', 'value': html}]
       }).encode()
       req = urllib.request.Request('https://api.sendgrid.com/v3/mail/send',
         data=data,
