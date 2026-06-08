@@ -368,11 +368,9 @@ Cordialement,
 LARACH BLOOM'''
 
     def send_via_sendgrid(to, subject, html, text):
-      print(f'[EMAIL] Sending via SendGrid to {to} - subject: {subject}')
-      print(f'[EMAIL] SENDGRID_API_KEY set: {bool(SENDGRID_API_KEY)}, length: {len(SENDGRID_API_KEY) if SENDGRID_API_KEY else 0}')
       data = json.dumps({
         'personalizations': [{'to': [{'email': to}]}],
-        'from': {'email': 'larachbloom@gmail.com', 'name': 'LARACH BLOOM'},
+        'from': {'email': 'contact@larach-bloom.com', 'name': 'LARACH BLOOM'},
         'subject': subject,
         'content': [{'type': 'text/plain', 'value': text}, {'type': 'text/html', 'value': html}]
       }).encode()
@@ -381,8 +379,7 @@ LARACH BLOOM'''
         headers={'Authorization': f'Bearer {SENDGRID_API_KEY}', 'Content-Type': 'application/json'},
         method='POST')
       try:
-        resp = urllib.request.urlopen(req)
-        print(f'[EMAIL] SendGrid success to {to}: {resp.status}')
+        urllib.request.urlopen(req)
       except urllib.error.HTTPError as e:
         err_body = e.read().decode()
         print(f'[EMAIL] SendGrid error to {to}: {e.code} {err_body}')
@@ -408,11 +405,9 @@ LARACH BLOOM'''
         print(f'SMTP error to {to}: {e}')
 
     def send(to, subject, html, text):
-      print(f'[EMAIL] send() called - to={to}, subject={subject}, SENDGRID_API_KEY={bool(SENDGRID_API_KEY)}')
       if SENDGRID_API_KEY:
         send_via_sendgrid(to, subject, html, text)
       else:
-        print(f'[EMAIL] No SENDGRID_API_KEY, falling back to SMTP')
         send_via_smtp(to, subject, html, text)
 
     threading.Thread(target=send, args=('larachbloom@gmail.com', shop_subject, shop_html, shop_text)).start()
