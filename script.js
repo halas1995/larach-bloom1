@@ -854,6 +854,16 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.removeItem('lb_cart');
             document.getElementById('successOverlay').classList.add('active');
             document.getElementById('orderRef').textContent = data.id;
+            emailjs.send('REPLACE_WITH_SERVICE_ID', 'REPLACE_WITH_TEMPLATE_ID', {
+              order_id: data.id,
+              customer_name: order.customer.firstName + ' ' + order.customer.lastName,
+              customer_phone: order.customer.phone,
+              customer_email: order.customer.email,
+              customer_city: order.customer.city,
+              customer_address: order.customer.address,
+              order_items: order.items.map(function(i) { return i.name + ' x' + i.qty; }).join(', '),
+              order_total: order.total + ' DH'
+            });
           } else {
             alert('Erreur: ' + (data.error || 'Impossible de passer la commande.'));
             btn.disabled = false;
