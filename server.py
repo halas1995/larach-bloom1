@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, sys, json, base64, hashlib, hmac, time, re, smtplib, threading, urllib.request
+import os, sys, json, base64, hashlib, hmac, time, re, smtplib, threading, urllib.request, urllib.error
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime, timezone
 from urllib.parse import urlparse, parse_qs
@@ -12,6 +12,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 
 SMTP_EMAIL = os.environ.get('SMTP_EMAIL', '')
 SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', '')
 DATABASE_URL = os.environ.get('DATABASE_URL', '')
 
 ADMIN_USER = 'admin'
@@ -293,7 +294,7 @@ def auth_ok(headers):
   except: return False
 
 def send_order_email(order):
-  if not SMTP_EMAIL or not SMTP_PASSWORD: return
+  if not SENDGRID_API_KEY and (not SMTP_EMAIL or not SMTP_PASSWORD): return
   try:
     c = order.get('customer', {})
     items = order.get('items', [])
@@ -301,8 +302,13 @@ def send_order_email(order):
     oid = order.get('id', '?')
     date = datetime.now().strftime('%d/%m/%Y %H:%M')
 
-    items_html = ''.join(f'<tr><td style="padding:8px 12px;border-bottom:1px solid #eee">{i.get("name","")}</td><td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:center">x{i.get("qty","")}</td><td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:right">{i.get("price",0)*i.get("qty",1)} DH</td></tr>' for i in items)
     total_str = f'{total:,}'.replace(',', ' ') + ' DH'
+
+    shop_subject = f'Nouvelle commande #{oid}'
+    client_subject = f'Confirmation commande #{oid}'
+
+    items_rows = ''.join(f'<tr><td style="padding:8px 12px;border-bottom:1px solid #eee">{i.get("name","")}</td><td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:center">x{i.get("qty","")}</td><td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:right">{i.get("price",0)*i.get("qty",1)} DH</td></tr>' for i in items)
+    items_line = ', '.join(f'{i.get("name","")} x{i.get("qty","")}' for i in items)
 
     shop_html = f'''<html><body style="font-family:Arial,sans-serif;padding:20px">
 <h2 style="color:#3d3530">Nouvelle commande #{oid}</h2>
@@ -310,36 +316,74 @@ def send_order_email(order):
 <h3>Client</h3>
 <p><strong>Nom :</strong> {c.get("firstName","")} {c.get("lastName","")}<br>
 <strong>T\u00e9l\u00e9phone :</strong> {c.get("phone","")}<br>
-<strong>Email :</strong> {c.get("email","") or "Non renseigné"}<br>
+<strong>Email :</strong> {c.get("email","") or "Non renseign\u00e9"}<br>
 <strong>Ville :</strong> {c.get("city","")}<br>
 <strong>Adresse :</strong> {c.get("address","")}<br>
 <strong>Notes :</strong> {c.get("notes","") or "Aucune"}</p>
 <h3>Articles</h3>
-<table style="width:100%;border-collapse:collapse">{items_html}</table>
+<table style="width:100%;border-collapse:collapse">{items_rows}</table>
 <p style="font-size:18px;font-weight:bold;margin-top:16px">Total : {total_str}</p>
 <p style="color:#666">Paiement à la livraison (COD)</p>
 </body></html>'''
 
+    shop_text = f'''Nouvelle commande #{oid}
+Date: {date}
+
+Client: {c.get("firstName","")} {c.get("lastName","")}
+T\u00e9l: {c.get("phone","")}
+Email: {c.get("email","") or "Non renseign\u00e9"}
+Ville: {c.get("city","")}
+Adresse: {c.get("address","")}
+Notes: {c.get("notes","") or "Aucune"}
+
+Articles: {items_line}
+Total: {total_str}
+Paiement: COD'''
+
     client_html = f'''<html><body style="font-family:Arial,sans-serif;padding:20px">
-<h2 style="color:#3d3530">Confirmation de commande #{oid} / \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628 #{oid}</h2>
-<p>Bonjour {c.get("firstName","")} \u0645\u0631\u062d\u0628\u0627\u064b</p>
-<p>Merci pour votre commande sur <strong>LARACH BLOOM</strong>. \u0634\u0643\u0631\u0627\u064b \u0644\u0637\u0644\u0628\u0643 \u0645\u0646 LARACH BLOOM</p>
-<h3>R\u00e9capitulatif / \u0645\u0644\u062e\u0635 \u0627\u0644\u0637\u0644\u0628</h3>
-<table style="width:100%;border-collapse:collapse">{items_html}</table>
-<p style="font-size:18px;font-weight:bold;margin-top:16px">Total / \u0627\u0644\u0645\u062c\u0645\u0648\u0639 : {total_str}</p>
-<p><strong>Ville / \u0627\u0644\u0645\u062f\u064a\u0646\u0629 :</strong> {c.get("city","")}<br>
-<strong>Adresse / \u0627\u0644\u0639\u0646\u0648\u0627\u0646 :</strong> {c.get("address","")}</p>
-<p>Nous vous contacterons par t\u00e9l\u00e9phone pour confirmer la livraison.<br>
-\u0633\u0646\u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0643 \u0647\u0627\u062a\u0641\u064a\u0627\u064b \u0644\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u062a\u0648\u0635\u064a\u0644.</p>
-<p>Cordialement,<br>\u0645\u0639 \u062a\u062d\u064a\u0627\u062a\u060c<br>LARACH BLOOM</p>
+<h2 style="color:#3d3530">Confirmation commande #{oid}</h2>
+<p>Bonjour {c.get("firstName","")},</p>
+<p>Merci pour votre commande sur <strong>LARACH BLOOM</strong>.</p>
+<h3>R\u00e9capitulatif</h3>
+<table style="width:100%;border-collapse:collapse">{items_rows}</table>
+<p style="font-size:18px;font-weight:bold;margin-top:16px">Total : {total_str}</p>
+<p><strong>Ville :</strong> {c.get("city","")}<br>
+<strong>Adresse :</strong> {c.get("address","")}</p>
+<p>Nous vous contacterons par t\u00e9l\u00e9phone pour confirmer la livraison.</p>
+<p>Cordialement,<br>LARACH BLOOM</p>
 </body></html>'''
 
-    def send(to, subject, html):
-      msg = MIMEMultipart('alternative')
-      msg['From'] = f'LARACH BLOOM <{SMTP_EMAIL}>'
-      msg['To'] = to
-      msg['Subject'] = subject
-      msg.attach(MIMEText(html, 'html', 'utf-8'))
+    client_text = f'''Bonjour {c.get("firstName","")},
+
+Merci pour votre commande sur LARACH BLOOM !
+
+R\u00e9f\u00e9rence: #{oid}
+Total: {total_str}
+Ville: {c.get("city","")}
+Adresse: {c.get("address","")}
+
+Nous vous contacterons par t\u00e9l\u00e9phone pour confirmer la livraison.
+
+Cordialement,
+LARACH BLOOM'''
+
+    def send_via_sendgrid(to, subject, html, text):
+      data = json.dumps({
+        'personalizations': [{'to': [{'email': to}]}],
+        'from': {'email': 'larachbloom@gmail.com', 'name': 'LARACH BLOOM'},
+        'subject': subject,
+        'content': [{'type': 'text/html', 'value': html}, {'type': 'text/plain', 'value': text}]
+      }).encode()
+      req = urllib.request.Request('https://api.sendgrid.com/v3/mail/send',
+        data=data,
+        headers={'Authorization': f'Bearer {SENDGRID_API_KEY}', 'Content-Type': 'application/json'},
+        method='POST')
+      try:
+        urllib.request.urlopen(req)
+      except urllib.error.HTTPError as e:
+        print(f'SendGrid error to {to}: {e.code} {e.read().decode()}')
+
+    def send_via_smtp(to, subject, html, text):
       try:
         try:
           s = smtplib.SMTP_SSL('smtp.gmail.com', 465)
@@ -348,15 +392,27 @@ def send_order_email(order):
           s = smtplib.SMTP('smtp.gmail.com', 587)
           s.starttls()
           s.login(SMTP_EMAIL, SMTP_PASSWORD)
+        msg = MIMEMultipart('alternative')
+        msg['From'] = f'LARACH BLOOM <{SMTP_EMAIL}>'
+        msg['To'] = to
+        msg['Subject'] = subject
+        msg.attach(MIMEText(text, 'plain', 'utf-8'))
+        msg.attach(MIMEText(html, 'html', 'utf-8'))
         s.sendmail(SMTP_EMAIL, [to], msg.as_string())
         s.quit()
       except Exception as e:
         print(f'SMTP error to {to}: {e}')
 
-    threading.Thread(target=send, args=(SMTP_EMAIL, f'Nouvelle commande #{oid}', shop_html)).start()
+    def send(to, subject, html, text):
+      if SENDGRID_API_KEY:
+        send_via_sendgrid(to, subject, html, text)
+      else:
+        send_via_smtp(to, subject, html, text)
+
+    threading.Thread(target=send, args=('larachbloom@gmail.com', shop_subject, shop_html, shop_text)).start()
     cust_email = c.get('email', '').strip()
     if cust_email:
-      threading.Thread(target=send, args=(cust_email, f'Confirmation commande #{oid} / \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628 #{oid}', client_html)).start()
+      threading.Thread(target=send, args=(cust_email, client_subject, client_html, client_text)).start()
   except Exception as e:
     print(f'Send email error: {e}')
 
