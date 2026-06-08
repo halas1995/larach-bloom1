@@ -310,28 +310,118 @@ def send_order_email(order):
     items_rows = ''.join(f'<tr><td style="padding:8px 12px;border-bottom:1px solid #eee">{i.get("name","")}</td><td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:center">x{i.get("qty","")}</td><td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:right">{i.get("price",0)*i.get("qty",1)} DH</td></tr>' for i in items)
     items_line = ', '.join(f'{i.get("name","")} x{i.get("qty","")}' for i in items)
 
-    shop_html = f'''<html><body style="font-family:Arial,sans-serif;padding:20px">
-<h2 style="color:#3d3530">Nouvelle commande #{oid}</h2>
-<p><strong>Date :</strong> {date}</p>
-<h3>Client</h3>
-<p><strong>Nom :</strong> {c.get("firstName","")} {c.get("lastName","")}<br>
-<strong>T\u00e9l\u00e9phone :</strong> {c.get("phone","")}<br>
-<strong>Email :</strong> {c.get("email","") or "Non renseign\u00e9"}<br>
-<strong>Ville :</strong> {c.get("city","")}<br>
-<strong>Adresse :</strong> {c.get("address","")}<br>
-<strong>Notes :</strong> {c.get("notes","") or "Aucune"}</p>
-<h3>Articles</h3>
-<table style="width:100%;border-collapse:collapse">{items_rows}</table>
-<p style="font-size:18px;font-weight:bold;margin-top:16px">Total : {total_str}</p>
-<p style="color:#666">Paiement à la livraison (COD)</p>
+    logo_url = 'https://larach-bloom.com/assets/images/logo.png'
+    bordeaux = '#4e0806'
+    gold = '#c9a96e'
+    warm = '#3d3530'
+    bg = '#f8f1ea'
+
+    shop_html = f'''<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:{bg};font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:{bg};padding:30px 10px">
+<tr><td align="center">
+  <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+    <tr><td align="center" style="background:{bordeaux};padding:30px 20px">
+      <img src="{logo_url}" alt="LARACH BLOOM" width="160" style="display:block;border:0">
+    </td></tr>
+    <tr><td style="padding:30px">
+      <h1 style="margin:0 0 20px;font-size:22px;color:{warm}">Nouvelle commande <span style="color:{gold}">#{oid}</span></h1>
+      <p style="margin:0 0 6px;color:#666;font-size:13px">Date : {date}</p>
+
+      <h2 style="margin:24px 0 12px;font-size:16px;color:{bordeaux};border-bottom:2px solid {bg};padding-bottom:6px">Client</h2>
+      <table width="100%" cellpadding="4" cellspacing="0" style="font-size:14px;color:#444">
+        <tr><td width="120" style="color:#999">Nom</td><td><strong>{c.get("firstName","")} {c.get("lastName","")}</strong></td></tr>
+        <tr><td style="color:#999">Téléphone</td><td>{c.get("phone","")}</td></tr>
+        <tr><td style="color:#999">Email</td><td>{c.get("email","") or "Non renseigné"}</td></tr>
+        <tr><td style="color:#999">Ville</td><td>{c.get("city","")}</td></tr>
+        <tr><td style="color:#999">Adresse</td><td>{c.get("address","")}</td></tr>
+        <tr><td style="color:#999">Notes</td><td style="color:#666">{c.get("notes","") or "Aucune"}</td></tr>
+      </table>
+
+      <h2 style="margin:24px 0 12px;font-size:16px;color:{bordeaux};border-bottom:2px solid {bg};padding-bottom:6px">Articles</h2>
+      <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px">
+        <thead>
+          <tr style="background:{bg};color:{warm}">
+            <th style="padding:10px 12px;text-align:left;font-weight:600">Produit</th>
+            <th style="padding:10px 12px;text-align:center;font-weight:600">Qté</th>
+            <th style="padding:10px 12px;text-align:right;font-weight:600">Total</th>
+          </tr>
+        </thead>
+        <tbody>{items_rows}</tbody>
+      </table>
+
+      <div style="margin-top:20px;padding:16px 20px;background:{bg};border-radius:8px;text-align:right">
+        <span style="font-size:14px;color:#666">Total</span>
+        <span style="font-size:22px;font-weight:700;color:{bordeaux};margin-left:10px">{total_str}</span>
+      </div>
+
+      <p style="margin-top:20px;font-size:13px;color:#999;text-align:center;border-top:1px solid {bg};padding-top:16px">Paiement à la livraison (COD)</p>
+    </td></tr>
+    <tr><td style="background:{bordeaux};padding:16px;text-align:center">
+      <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.7)">LARACH BLOOM — Beauté naturelle marocaine</p>
+    </td></tr>
+  </table>
+</td></tr></table>
+</body></html>'''
+
+    client_html = f'''<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:{bg};font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:{bg};padding:30px 10px">
+<tr><td align="center">
+  <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06)">
+    <tr><td align="center" style="background:{bordeaux};padding:30px 20px">
+      <img src="{logo_url}" alt="LARACH BLOOM" width="160" style="display:block;border:0">
+    </td></tr>
+    <tr><td style="padding:30px">
+      <h1 style="margin:0 0 8px;font-size:24px;color:{warm}">Merci pour votre commande !</h1>
+      <p style="margin:0 0 20px;font-size:15px;color:#666">Bonjour <strong>{c.get("firstName","")}</strong>,</p>
+      <p style="margin:0 0 6px;font-size:14px;color:#444">Votre commande <span style="color:{gold};font-weight:700">#{oid}</span> a bien été enregistrée.</p>
+      <p style="margin:0 0 24px;font-size:14px;color:#444">Nous vous contacterons par téléphone pour confirmer la livraison.</p>
+
+      <h2 style="margin:0 0 12px;font-size:16px;color:{bordeaux};border-bottom:2px solid {bg};padding-bottom:6px">Récapitulatif</h2>
+      <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px">
+        <thead>
+          <tr style="background:{bg};color:{warm}">
+            <th style="padding:10px 12px;text-align:left;font-weight:600">Produit</th>
+            <th style="padding:10px 12px;text-align:center;font-weight:600">Qté</th>
+            <th style="padding:10px 12px;text-align:right;font-weight:600">Total</th>
+          </tr>
+        </thead>
+        <tbody>{items_rows}</tbody>
+      </table>
+
+      <div style="margin-top:20px;padding:16px 20px;background:{bg};border-radius:8px;text-align:right">
+        <span style="font-size:14px;color:#666">Total</span>
+        <span style="font-size:22px;font-weight:700;color:{bordeaux};margin-left:10px">{total_str}</span>
+      </div>
+
+      <div style="margin-top:24px;padding:16px;background:#fff8f0;border-radius:8px;border-left:4px solid {gold}">
+        <p style="margin:0 0 4px;font-size:14px;color:{warm}"><strong>Livraison</strong></p>
+        <p style="margin:0;font-size:14px;color:#666">{c.get("city","")} &mdash; {c.get("address","")}</p>
+        <p style="margin:8px 0 0;font-size:14px;color:#666"><strong>Tél :</strong> {c.get("phone","")}</p>
+      </div>
+
+      <p style="margin-top:24px;font-size:14px;color:#666;line-height:1.6">À bientôt sur <strong>LARACH BLOOM</strong> !<br>
+      <span style="font-size:13px;color:#999">L'équipe LARACH BLOOM</span></p>
+    </td></tr>
+    <tr><td style="background:{bordeaux};padding:16px;text-align:center">
+      <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.7)">LARACH BLOOM — Beauté naturelle marocaine</p>
+      <p style="margin:6px 0 0;font-size:11px;color:rgba(255,255,255,0.5)"><a href="https://larach-bloom.com" style="color:rgba(255,255,255,0.7);text-decoration:none">larach-bloom.com</a></p>
+    </td></tr>
+  </table>
+</td></tr></table>
 </body></html>'''
 
     shop_text = f'''Nouvelle commande #{oid}
 Date: {date}
 
 Client: {c.get("firstName","")} {c.get("lastName","")}
-T\u00e9l: {c.get("phone","")}
-Email: {c.get("email","") or "Non renseign\u00e9"}
+Tél: {c.get("phone","")}
+Email: {c.get("email","") or "Non renseigné"}
 Ville: {c.get("city","")}
 Adresse: {c.get("address","")}
 Notes: {c.get("notes","") or "Aucune"}
@@ -340,29 +430,16 @@ Articles: {items_line}
 Total: {total_str}
 Paiement: COD'''
 
-    client_html = f'''<html><body style="font-family:Arial,sans-serif;padding:20px">
-<h2 style="color:#3d3530">Confirmation commande #{oid}</h2>
-<p>Bonjour {c.get("firstName","")},</p>
-<p>Merci pour votre commande sur <strong>LARACH BLOOM</strong>.</p>
-<h3>R\u00e9capitulatif</h3>
-<table style="width:100%;border-collapse:collapse">{items_rows}</table>
-<p style="font-size:18px;font-weight:bold;margin-top:16px">Total : {total_str}</p>
-<p><strong>Ville :</strong> {c.get("city","")}<br>
-<strong>Adresse :</strong> {c.get("address","")}</p>
-<p>Nous vous contacterons par t\u00e9l\u00e9phone pour confirmer la livraison.</p>
-<p>Cordialement,<br>LARACH BLOOM</p>
-</body></html>'''
-
     client_text = f'''Bonjour {c.get("firstName","")},
 
 Merci pour votre commande sur LARACH BLOOM !
 
-R\u00e9f\u00e9rence: #{oid}
+Référence: #{oid}
 Total: {total_str}
 Ville: {c.get("city","")}
 Adresse: {c.get("address","")}
 
-Nous vous contacterons par t\u00e9l\u00e9phone pour confirmer la livraison.
+Nous vous contacterons par téléphone pour confirmer la livraison.
 
 Cordialement,
 LARACH BLOOM'''
