@@ -2274,14 +2274,28 @@ section {
     font-size: 13px;
   }
 
+  .hp-review-card {
+    min-width: 220px;
+    max-width: 260px;
+    padding: 20px 16px;
+  }
+
   .hp-reviews-carousel {
-    padding: 0 54px;
+    padding: 0 46px;
   }
 
   .hp-review-arrow {
     width: 30px;
     height: 30px;
     font-size: 12px;
+    background: transparent;
+    border-color: rgba(196, 181, 154, 0.4);
+    box-shadow: none;
+  }
+
+  .hp-review-arrow:hover {
+    background: transparent;
+    border-color: rgba(196, 181, 154, 0.7);
   }
 
   .footer-inner {
