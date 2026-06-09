@@ -8,8 +8,9 @@
 <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
 <link rel="icon" href="assets/images/favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/images/app-icon.png">
-<link rel="preload" as="image" href="assets/images/logo-header.png">
+<link rel="preload" as="image" href="assets/images/logo-header.png" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -125,7 +126,7 @@
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <img src="assets/images/logo.png" alt="LARACH BLOOM" class="footer-logo">
+      <img src="assets/images/logo.png" alt="LARACH BLOOM" class="footer-logo" loading="lazy">
       <p data-i18n="footerTag">Inspir\u00e9 par la nature,<br>cr\u00e9\u00e9 pour votre peau</p>
     </div>
     <div class="footer-col">
