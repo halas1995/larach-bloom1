@@ -316,13 +316,19 @@
     }
     cardWidth = track.firstChild ? track.firstChild.offsetWidth + gap : 0;
 
+    var carousel = document.querySelector('.hp-reviews-carousel');
     var pos = 0;
     var maxPos = list.length;
+    function centerOffset() {
+      if (!carousel) return 0;
+      var cw = carousel.clientWidth;
+      return Math.max(0, (cw - (cardWidth - gap)) / 2);
+    }
     function goTo(index) {
       if (index < 0) index = list.length - 1;
       if (index >= list.length) index = 0;
       pos = index;
-      track.style.transform = 'translateX(-' + (pos * cardWidth) + 'px)';
+      track.style.transform = 'translateX(-' + (pos * cardWidth - centerOffset()) + 'px)';
     }
     document.getElementById('reviewArrowLeft').onclick = function() { goTo(pos - 1); };
     document.getElementById('reviewArrowRight').onclick = function() { goTo(pos + 1); };
