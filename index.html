@@ -332,6 +332,10 @@
     }
     document.getElementById('reviewArrowLeft').onclick = function() { goTo(pos - 1); };
     document.getElementById('reviewArrowRight').onclick = function() { goTo(pos + 1); };
+    // Center first review on load without animation
+    track.style.transition = 'none';
+    goTo(0);
+    requestAnimationFrame(function() { track.style.transition = ''; });
   }
 
   function submitReview() {
