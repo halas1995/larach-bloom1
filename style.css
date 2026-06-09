@@ -1581,22 +1581,48 @@ section {
   overflow: hidden;
   margin-bottom: 40px;
   position: relative;
+  padding: 0 50px;
 }
 
 .hp-reviews-track {
   display: flex;
   gap: 32px;
   width: max-content;
-  animation: reviewScroll 30s linear infinite;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.hp-reviews-carousel:hover .hp-reviews-track {
-  animation-play-state: paused;
+.hp-review-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #c4b59a;
+  background: #fff;
+  color: #3d3530;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-@keyframes reviewScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+.hp-review-arrow:hover {
+  background: #3d3530;
+  color: #fff;
+  border-color: #3d3530;
+}
+
+.hp-review-arrow-left {
+  left: 0;
+}
+
+.hp-review-arrow-right {
+  right: 0;
 }
 
 .hp-review-card {
@@ -2246,6 +2272,16 @@ section {
 
   .hp-review-card p {
     font-size: 13px;
+  }
+
+  .hp-reviews-carousel {
+    padding: 0 36px;
+  }
+
+  .hp-review-arrow {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
   }
 
   .footer-inner {
