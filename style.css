@@ -2275,25 +2275,13 @@ section {
   }
 
   .hp-reviews-carousel {
-    padding: 0 0 56px;
+    padding: 0 46px;
   }
 
   .hp-review-arrow {
-    top: auto;
-    bottom: 0;
-    transform: none;
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
     font-size: 14px;
-  }
-
-  .hp-review-arrow-left {
-    left: calc(50% - 48px);
-  }
-
-  .hp-review-arrow-right {
-    left: calc(50% + 8px);
-    right: auto;
   }
 
   .footer-inner {
