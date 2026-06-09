@@ -323,7 +323,8 @@
       return Math.max(0, (carousel.clientWidth - (cardWidth - gap)) / 2);
     }
     function goTo(index) {
-      if (index < 0 || index >= total) return;
+      if (index < 0) index = total - 1;
+      if (index >= total) index = 0;
       pos = index;
       track.style.transform = 'translateX(-' + (pos * cardWidth - centerOffset()) + 'px)';
     }
