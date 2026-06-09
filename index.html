@@ -323,23 +323,7 @@
       return Math.max(0, (carousel.clientWidth - (cardWidth - gap)) / 2);
     }
     function goTo(index) {
-      if (pos === index) return;
-      var noTransition = false;
-      if (index < 0) {
-        index = total - 1;
-        noTransition = true;
-      } else if (index >= total) {
-        index = 0;
-        noTransition = true;
-      }
-      if (noTransition) {
-        // Instantly jump to the duplicate version of the target
-        var jumpPos = index + total;
-        track.style.transition = 'none';
-        track.style.transform = 'translateX(-' + (jumpPos * cardWidth - centerOffset()) + 'px)';
-        var _ = track.offsetHeight; // force reflow
-        track.style.transition = '';
-      }
+      if (index < 0 || index >= total) return;
       pos = index;
       track.style.transform = 'translateX(-' + (pos * cardWidth - centerOffset()) + 'px)';
     }
@@ -348,7 +332,8 @@
     // Center first review on load without animation
     track.style.transition = 'none';
     track.style.transform = 'translateX(-' + (0 * cardWidth - centerOffset()) + 'px)';
-    requestAnimationFrame(function() { track.style.transition = ''; });
+    var _ = track.offsetHeight;
+    track.style.transition = '';
   }
 
   function submitReview() {

@@ -1595,26 +1595,26 @@ section {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 1px solid #c4b59a;
-  background: #fff;
-  color: #3d3530;
-  font-size: 18px;
+  border: 1.5px solid #c4b59a;
+  background: transparent;
+  color: #c4b59a;
+  font-size: 16px;
   cursor: pointer;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  opacity: 0.6;
 }
 
 .hp-review-arrow:hover {
-  background: #3d3530;
-  color: #fff;
+  opacity: 1;
   border-color: #3d3530;
+  color: #3d3530;
 }
 
 .hp-review-arrow-left {
@@ -2285,17 +2285,14 @@ section {
   }
 
   .hp-review-arrow {
-    width: 30px;
-    height: 30px;
-    font-size: 12px;
-    background: transparent;
-    border-color: rgba(196, 181, 154, 0.4);
-    box-shadow: none;
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+    opacity: 0.5;
   }
 
   .hp-review-arrow:hover {
-    background: transparent;
-    border-color: rgba(196, 181, 154, 0.7);
+    opacity: 0.8;
   }
 
   .footer-inner {
