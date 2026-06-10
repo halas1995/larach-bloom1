@@ -1550,6 +1550,7 @@ section {
 .hp-reviews {
   padding: 100px 0;
   position: relative;
+  background: #fbf9f7;
 }
 
 .hp-flowers-bg {
@@ -1597,12 +1598,12 @@ section {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1.5px solid #c4b59a;
-  background: transparent;
-  color: #c4b59a;
+  background: rgba(255,255,255,0.92);
+  color: #8a7a6b;
   font-size: 16px;
   cursor: pointer;
   z-index: 2;
@@ -1610,14 +1611,16 @@ section {
   align-items: center;
   justify-content: center;
   transition: all 0.3s;
-  opacity: 0.6;
+  box-shadow: 0 2px 12px rgba(61,53,48,0.08);
   touch-action: manipulation;
 }
 
 .hp-review-arrow:hover {
+  background: #c4b59a;
+  color: #fff;
+  border-color: #c4b59a;
+  box-shadow: 0 4px 20px rgba(196,181,154,0.35);
   opacity: 1;
-  border-color: #3d3530;
-  color: #3d3530;
 }
 
 .hp-review-arrow-left {
@@ -1630,26 +1633,44 @@ section {
 
 .hp-review-card {
   text-align: center;
-  padding: 32px 20px;
+  padding: 40px 28px 32px;
   background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(61,53,48,0.06);
+  border: 1px solid #f0ebe5;
+  position: relative;
   min-width: 280px;
   max-width: 320px;
   flex-shrink: 0;
 }
 
+.hp-review-card::before {
+  content: '\201C';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 52px;
+  color: #c4b59a;
+  font-family: Georgia, serif;
+  line-height: 1;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
 .hp-review-stars {
   display: flex;
   justify-content: center;
-  gap: 3px;
-  margin-bottom: 16px;
+  gap: 4px;
+  margin-bottom: 20px;
 }
 
 .hp-review-card p {
-  font-size: 13px;
-  line-height: 1.8;
-  color: #666;
+  font-size: 14px;
+  line-height: 1.9;
+  color: #555;
   font-style: italic;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   overflow-wrap: break-word;
   word-break: break-word;
 }
@@ -1657,8 +1678,9 @@ section {
 .hp-review-author {
   font-size: 11px;
   color: #c4b59a;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
+  font-weight: 500;
 }
 
 .hp-review-toggle {
@@ -2282,7 +2304,12 @@ section {
   .hp-review-card {
     min-width: 220px;
     max-width: 260px;
-    padding: 20px 16px;
+    padding: 36px 20px 24px;
+  }
+
+  .hp-review-card::before {
+    top: 2px;
+    font-size: 42px;
   }
 
   .hp-reviews-carousel {
@@ -2290,14 +2317,10 @@ section {
   }
 
   .hp-review-arrow {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     font-size: 13px;
-    opacity: 0.5;
-  }
-
-  .hp-review-arrow:hover {
-    opacity: 0.8;
+    background: rgba(255,255,255,0.85);
   }
 
   .footer-inner {
