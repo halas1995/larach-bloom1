@@ -323,9 +323,23 @@
       return Math.max(0, (carousel.clientWidth - (cardWidth - gap)) / 2);
     }
     function goTo(index) {
-      if (index < 0 || index >= total) return;
+      if (index < 0) {
+        track.style.transition = 'none';
+        pos = total - 1;
+        track.style.transform = 'translateX(-' + (pos * cardWidth - centerOffset()) + 'px)';
+        var _ = track.offsetHeight;
+        track.style.transition = '';
+        return;
+      }
+      if (index >= total) {
+        track.style.transition = 'none';
+        pos = 0;
+        track.style.transform = 'translateX(-' + (pos * cardWidth - centerOffset()) + 'px)';
+        var _ = track.offsetHeight;
+        track.style.transition = '';
+        return;
+      }
       pos = index;
-      track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
       track.style.transform = 'translateX(-' + (pos * cardWidth - centerOffset()) + 'px)';
     }
     var leftBtn = document.getElementById('reviewArrowLeft');

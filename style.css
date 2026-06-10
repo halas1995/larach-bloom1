@@ -1650,6 +1650,8 @@ section {
   color: #666;
   font-style: italic;
   margin-bottom: 16px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .hp-review-author {
