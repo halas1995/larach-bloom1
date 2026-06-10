@@ -323,13 +323,22 @@
       return Math.max(0, (carousel.clientWidth - (cardWidth - gap)) / 2);
     }
     function goTo(index) {
-      if (index < 0) index = total - 1;
-      if (index >= total) index = 0;
+      if (index < 0 || index >= total) return;
       pos = index;
+      track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
       track.style.transform = 'translateX(-' + (pos * cardWidth - centerOffset()) + 'px)';
     }
-    document.getElementById('reviewArrowLeft').onclick = function() { goTo(pos - 1); };
-    document.getElementById('reviewArrowRight').onclick = function() { goTo(pos + 1); };
+    var leftBtn = document.getElementById('reviewArrowLeft');
+    var rightBtn = document.getElementById('reviewArrowRight');
+    var navLock = false;
+    function nav(e, dir) {
+      if (navLock) return;
+      navLock = true;
+      setTimeout(function() { navLock = false; }, 400);
+      goTo(pos + dir);
+    }
+    leftBtn.addEventListener('click', nav.bind(null, null, -1));
+    rightBtn.addEventListener('click', nav.bind(null, null, 1));
     // Center first review on load without animation
     track.style.transition = 'none';
     track.style.transform = 'translateX(-' + (0 * cardWidth - centerOffset()) + 'px)';

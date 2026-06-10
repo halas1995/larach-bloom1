@@ -1611,6 +1611,7 @@ section {
   justify-content: center;
   transition: all 0.3s;
   opacity: 0.6;
+  touch-action: manipulation;
 }
 
 .hp-review-arrow:hover {
