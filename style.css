@@ -1577,22 +1577,44 @@ section {
 }
 
 .hp-reviews-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
   margin-bottom: 40px;
   position: relative;
-  padding: 0 50px;
+  padding: 0 60px;
 }
 
-.hp-reviews-track-wrap {
-  overflow: hidden;
+.hp-review-card {
+  text-align: center;
+  padding: 48px 32px 36px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(61,53,48,0.06);
+  border: 1px solid #f0ebe5;
   position: relative;
+  width: 100%;
+  max-width: 520px;
+  min-height: 200px;
+  transition: opacity 0.3s ease;
+  box-sizing: border-box;
 }
 
-.hp-reviews-track {
-  display: flex;
-  gap: 32px;
-  width: max-content;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+.hp-review-card::before {
+  content: '\201C';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 52px;
+  color: #c4b59a;
+  font-family: Georgia, serif;
+  line-height: 1;
+  opacity: 0.3;
+  pointer-events: none;
 }
+
 
 .hp-review-arrow {
   position: absolute;
@@ -1624,38 +1646,13 @@ section {
 }
 
 .hp-review-arrow-left {
-  left: 0;
+  position: absolute;
+  left: 8px;
 }
 
 .hp-review-arrow-right {
-  right: 0;
-}
-
-.hp-review-card {
-  text-align: center;
-  padding: 40px 28px 32px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(61,53,48,0.06);
-  border: 1px solid #f0ebe5;
-  position: relative;
-  min-width: 280px;
-  max-width: 320px;
-  flex-shrink: 0;
-}
-
-.hp-review-card::before {
-  content: '\201C';
   position: absolute;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 52px;
-  color: #c4b59a;
-  font-family: Georgia, serif;
-  line-height: 1;
-  opacity: 0.3;
-  pointer-events: none;
+  right: 8px;
 }
 
 .hp-review-stars {
@@ -1667,7 +1664,7 @@ section {
 
 .hp-review-card p {
   font-size: 14px;
-  line-height: 1.9;
+  line-height: 2;
   color: #555;
   font-style: italic;
   margin-bottom: 20px;
@@ -2302,9 +2299,8 @@ section {
   }
 
   .hp-review-card {
-    min-width: 220px;
-    max-width: 260px;
-    padding: 36px 20px 24px;
+    padding: 40px 20px 28px;
+    min-height: 180px;
   }
 
   .hp-review-card::before {
@@ -2313,7 +2309,8 @@ section {
   }
 
   .hp-reviews-carousel {
-    padding: 0 46px;
+    padding: 0 50px;
+    gap: 10px;
   }
 
   .hp-review-arrow {
@@ -2321,6 +2318,14 @@ section {
     height: 36px;
     font-size: 13px;
     background: rgba(255,255,255,0.85);
+  }
+
+  .hp-review-arrow-left {
+    left: 4px;
+  }
+
+  .hp-review-arrow-right {
+    right: 4px;
   }
 
   .footer-inner {

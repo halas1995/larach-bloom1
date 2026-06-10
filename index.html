@@ -186,7 +186,7 @@
       <h2 class="section-title">Ce que nos clientes disent</h2>
       <div class="hp-reviews-carousel">
         <button class="hp-review-arrow hp-review-arrow-left" id="reviewArrowLeft" aria-label="Précédent">&#10094;</button>
-        <div class="hp-reviews-track-wrap"><div class="hp-reviews-track" id="reviewsTrack"></div></div>
+        <div class="hp-review-card" id="reviewCard"></div>
         <button class="hp-review-arrow hp-review-arrow-right" id="reviewArrowRight" aria-label="Suivant">&#10095;</button>
       </div>
       <button class="hp-review-toggle" id="reviewToggle" onclick="document.getElementById('reviewForm').classList.toggle('active')">Laisser un avis</button>
@@ -287,61 +287,30 @@
   }
 
   function renderReviews(list) {
-    var track = document.getElementById('reviewsTrack');
-    if (!track || !list.length) return;
-    var cardWidth = 0;
-    var gap = 32;
-    function buildCard(r) {
+    var card = document.getElementById('reviewCard');
+    if (!card || !list.length) return;
+    var total = list.length;
+    var pos = 0;
+    function buildHTML(r) {
       var stars = '';
       for (var s = 0; s < 5; s++) {
         stars += '<svg width="12" height="12" viewBox="0 0 24 24"><path fill="' + (s < r.rating ? '#c4b59a' : '#e5ddd5') + '" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
       }
       var name = r.name || 'Anonyme';
       var prod = r.product_name ? ' sur ' + r.product_name : '';
-      var div = document.createElement('div');
-      div.className = 'hp-review-card';
-      div.innerHTML =
-        '<div class="hp-review-stars">' + stars + '</div>' +
-        '<p>"' + r.text + '"</p>' +
-        '<span class="hp-review-author">&mdash; ' + name + prod + '</span>';
-      return div;
+      return '<div class="hp-review-stars">' + stars + '</div><p>"' + r.text + '"</p><span class="hp-review-author">&mdash; ' + name + prod + '</span>';
     }
-    track.innerHTML = '';
-    for (var i = 0; i < list.length; i++) {
-      track.appendChild(buildCard(list[i]));
-    }
-    // duplicate for seamless loop
-    for (var j = 0; j < list.length; j++) {
-      track.appendChild(buildCard(list[j]));
-    }
-    cardWidth = track.firstChild ? track.firstChild.offsetWidth + gap : 0;
-    var total = list.length;
-    var carousel = document.querySelector('.hp-reviews-carousel');
-    var pos = 0;
-    function centerOffset() {
-      if (!carousel) return 0;
-      return Math.max(0, (carousel.clientWidth - (cardWidth - gap)) / 2);
-    }
-    function goTo(index) {
-      if (index < 0) {
-        track.style.transition = 'none';
-        pos = total - 1;
-        track.style.transform = 'translateX(-' + (pos * cardWidth - centerOffset()) + 'px)';
-        var _ = track.offsetHeight;
-        track.style.transition = '';
-        return;
-      }
-      if (index >= total) {
-        track.style.transition = 'none';
-        pos = 0;
-        track.style.transform = 'translateX(-' + (pos * cardWidth - centerOffset()) + 'px)';
-        var _ = track.offsetHeight;
-        track.style.transition = '';
-        return;
-      }
+    function show(index) {
+      if (index < 0) index = total - 1;
+      if (index >= total) index = 0;
       pos = index;
-      track.style.transform = 'translateX(-' + (pos * cardWidth - centerOffset()) + 'px)';
+      card.style.opacity = '0';
+      setTimeout(function() {
+        card.innerHTML = buildHTML(list[pos]);
+        card.style.opacity = '1';
+      }, 150);
     }
+    card.innerHTML = buildHTML(list[0]);
     var leftBtn = document.getElementById('reviewArrowLeft');
     var rightBtn = document.getElementById('reviewArrowRight');
     var navLock = false;
@@ -349,15 +318,10 @@
       if (navLock) return;
       navLock = true;
       setTimeout(function() { navLock = false; }, 400);
-      goTo(pos + dir);
+      show(pos + dir);
     }
     leftBtn.addEventListener('click', nav.bind(null, null, -1));
     rightBtn.addEventListener('click', nav.bind(null, null, 1));
-    // Center first review on load without animation
-    track.style.transition = 'none';
-    track.style.transform = 'translateX(-' + (0 * cardWidth - centerOffset()) + 'px)';
-    var _ = track.offsetHeight;
-    track.style.transition = '';
   }
 
   function submitReview() {
